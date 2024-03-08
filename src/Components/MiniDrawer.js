@@ -25,6 +25,7 @@ import TaskIcon from '@mui/icons-material/Task';
 import Dashboard from './Dashboard';
 import ProfileManager from './ProfileManager';
 import TaskManager from './TaskManager';
+import AccountMenu from './AccountMenu';
 
 
 const drawerWidth = 240;
@@ -118,25 +119,29 @@ export default function MiniDrawer() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Task Forge
-          </Typography>
-        </Toolbar>
-      </AppBar>
+    
+      <AppBar position="fixed">
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          sx={{
+            marginRight: 5,
+            ...(open && { display: 'none' }),
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" noWrap component="div">
+          Task Forge
+        </Typography>
+        <div style={{ marginLeft: 'auto' }}>
+          <AccountMenu /> {/* AccountMenu will be on the completely right side */}
+        </div>
+      </Toolbar>
+    </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>

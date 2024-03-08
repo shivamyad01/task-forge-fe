@@ -1,23 +1,37 @@
 // src/App.js
 
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
 import MiniDrawer from './Components/MiniDrawer';
 import Dashboard from './Components/Dashboard';
 import ProfileManager from './Components/ProfileManager';
 import TaskManager from './Components/TaskManager';
-
-// Import other components/pages as needed
+import Login from './Components/Login'; // Import the Login component
+import axios from 'axios';
 
 const App = () => {
+  const [isLoggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if the user is logged in by calling a backend route
+    axios.get('http://localhost:5001/checkLogin')
+      .then(response => {
+        if (response.data.loggedIn) {
+          setLoggedIn(true);
+        }
+      })
+      .catch(error => console.error('Error checking login status:', error));
+  }, []);
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<MiniDrawer />} />
-        <Route path="/dashboard" element={<Dashboard/>} />
-        <Route path="/profile" element={<ProfileManager/>} />
-        <Route path="/task" element={<TaskManager/>} />        
+        <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
+        <Route path="/" element={isLoggedIn ? <MiniDrawer /> : <Navigate to="/login" />} />
+        <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
+        <Route path="/profile" element={isLoggedIn ? <ProfileManager /> : <Navigate to="/login" />} />
+        <Route path="/task" element={isLoggedIn ? <TaskManager /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );
