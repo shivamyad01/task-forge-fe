@@ -9,6 +9,7 @@ import ProfileManager from './Components/ProfileManager';
 import TaskManager from './Components/TaskManager';
 import Login from './Components/Login'; // Import the Login component
 import axios from 'axios';
+import Register from './Components/Register';
 
 const App = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -28,6 +29,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
+        <Route path="/register" element={<Register/> } />
+
         <Route path="/" element={isLoggedIn ? <MiniDrawer /> : <Navigate to="/login" />} />
         <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
         <Route path="/profile" element={isLoggedIn ? <ProfileManager /> : <Navigate to="/login" />} />
