@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import { Link as RouterLink, Routes, Route } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -16,8 +17,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -26,7 +25,6 @@ import Dashboard from './Dashboard';
 import ProfileManager from './ProfileManager';
 import TaskManager from './TaskManager';
 import AccountMenu from './AccountMenu';
-
 
 const drawerWidth = 240;
 
@@ -101,8 +99,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [selectedTab, setSelectedTab] = React.useState('Dashbord');
+  const [open, setOpen] = useState(true); // Keep the drawer open by default
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -112,36 +109,31 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
-  const handleTabClick = (tab) => {
-    setSelectedTab(tab);
-  };
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-    
-      <AppBar position="fixed">
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-          sx={{
-            marginRight: 5,
-            ...(open && { display: 'none' }),
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" noWrap component="div">
-          Task Forge
-        </Typography>
-        <div style={{ marginLeft: 'auto' }}>
-          <AccountMenu /> {/* AccountMenu will be on the completely right side */}
-        </div>
-      </Toolbar>
-    </AppBar>
+      <AppBar position="fixed" open={open}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              marginRight: 5,
+              ...(open && { display: 'none' }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            Task Forge
+          </Typography>
+          <div style={{ marginLeft: 'auto' }}>
+            <AccountMenu /> {/* AccountMenu will be on the completely right side */}
+          </div>
+        </Toolbar>
+      </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
@@ -150,69 +142,51 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Dashbord', 'Profiles', 'Tasks', 'Reports'].map((text, index) => (
-            <ListItem
-              key={text}
-              disablePadding
-              sx={{ display: 'block' }}
-              onClick={() => handleTabClick(text)}
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <DashboardIcon /> : <AccountCircleIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0, color: '#fff' }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          <ListItem component={RouterLink} to="/dashboard">
+            <ListItemButton>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem component={RouterLink} to="/profile">
+            <ListItemButton>
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Profile" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem component={RouterLink} to="/task">
+            <ListItemButton>
+              <ListItemIcon>
+                <TaskIcon />
+              </ListItemIcon>
+              <ListItemText primary="Task" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem component={RouterLink} to="/settings">
+            <ListItemButton>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Settings" />
+            </ListItemButton>
+          </ListItem>
         </List>
         <Divider />
-        <List>
-          {['Setting '].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <SettingsIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0, color: '#fff' }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        {/* Add additional items or footer items here */}
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        {/* Adjusted paddingTop to accommodate AppBar */}
         <DrawerHeader />
-        {selectedTab === 'Dashbord' && <Dashboard />}
-        {selectedTab === 'Profiles' && <ProfileManager />}
-        {selectedTab === 'Tasks' && <TaskManager />}
-      
-        <Typography paragraph sx={{ color: '#333' }}>
-          {/* Add your content here with adjusted styling */}
-        </Typography>
+        <Routes>
+          
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<ProfileManager />} />
+          <Route path="/task" element={<TaskManager />} />
+        </Routes>
       </Box>
     </Box>
   );

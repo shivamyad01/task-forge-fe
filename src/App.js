@@ -1,5 +1,3 @@
-// src/App.js
-
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
@@ -29,12 +27,25 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
-        <Route path="/register" element={<Register/> } />
+        <Route path="/register" element={<Register />} />
 
-        <Route path="/" element={isLoggedIn ? <MiniDrawer /> : <Navigate to="/login" />} />
-        <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path="/profile" element={isLoggedIn ? <ProfileManager /> : <Navigate to="/login" />} />
-        <Route path="/task" element={isLoggedIn ? <TaskManager /> : <Navigate to="/login" />} />
+        <Route
+          path="/"
+          element={isLoggedIn ? <MiniDrawer /> : <Navigate to="/login" />}
+        >
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
+          />
+          <Route
+            path="/profile"
+            element={<ProfileManager />}
+          />
+          <Route
+            path="/task"
+            element={<TaskManager />}
+          />
+        </Route>
       </Routes>
     </Router>
   );
