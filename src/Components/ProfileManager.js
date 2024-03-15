@@ -1,26 +1,45 @@
-import React, { useState } from 'react';
-
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const ProfileManager = () => {
-  const [profiles, setProfiles] = useState([
-    { id: 1, name: 'John Doe', role: 'Developer' },
-    { id: 2, name: 'Jane Smith', role: 'Designer' },
-    // Add more profiles as needed
-  ]);
-
+  const [profiles, setProfiles] = useState([]);
   const [newProfile, setNewProfile] = useState({ name: '', role: '' });
   const [editingProfile, setEditingProfile] = useState(null);
+
+  useEffect(() => {
+    fetchProfiles();
+  }, []);
+
+  const fetchProfiles = async () => {
+    try {
+      const response = await axios.get('http://localhost:5001/profiles');
+      setProfiles(response.data);
+    } catch (error) {
+      console.error('Error fetching profiles:', error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProfile({ ...newProfile, [name]: value });
   };
 
-  const handleAddProfile = () => {
-    setProfiles([...profiles, { id: profiles.length + 1, ...newProfile }]);
-    setNewProfile({ name: '', role: '' });
+  const handleAddProfile = async () => {
+    // Check if name and role fields are not empty
+    if (!newProfile.name.trim() || !newProfile.role.trim()) {
+      console.error('Name and role fields cannot be empty');
+      return;
+    }
+  
+    try {
+      await axios.post('http://localhost:5001/profiles', newProfile);
+      setNewProfile({ name: '', role: '' });
+      fetchProfiles();
+    } catch (error) {
+      console.error('Error adding profile:', error);
+    }
   };
+  
 
   const handleEditProfile = (profileId) => {
     const profileToEdit = profiles.find(profile => profile.id === profileId);
@@ -28,18 +47,24 @@ const ProfileManager = () => {
     setNewProfile({ name: profileToEdit.name, role: profileToEdit.role });
   };
 
-  const handleUpdateProfile = () => {
-    const updatedProfiles = profiles.map(profile =>
-      profile.id === editingProfile.id ? { ...profile, ...newProfile } : profile
-    );
-    setProfiles(updatedProfiles);
-    setNewProfile({ name: '', role: '' });
-    setEditingProfile(null);
+  const handleUpdateProfile = async () => {
+    try {
+      await axios.put(`http://localhost:5001/profiles/${editingProfile.id}`, newProfile);
+      fetchProfiles();
+      setNewProfile({ name: '', role: '' });
+      setEditingProfile(null);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
   };
 
-  const handleRemoveProfile = (profileId) => {
-    const updatedProfiles = profiles.filter(profile => profile.id !== profileId);
-    setProfiles(updatedProfiles);
+  const handleRemoveProfile = async (profileId) => {
+    try {
+      await axios.delete(`http://localhost:5001/profiles/${profileId}`);
+      fetchProfiles();
+    } catch (error) {
+      console.error('Error removing profile:', error);
+    }
   };
 
   return (

@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const TaskManager = () => {
   const [tasks, setTasks] = useState([]);
+  const [profiles, setProfiles] = useState({}); // State to store profiles
   const [newTask, setNewTask] = useState({
     profileId: '',
     name: '',
@@ -13,6 +14,7 @@ const TaskManager = () => {
 
   useEffect(() => {
     fetchTasks();
+    fetchProfiles(); // Fetch profiles when component mounts
   }, []);
 
   const fetchTasks = async () => {
@@ -21,6 +23,20 @@ const TaskManager = () => {
       setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
+    }
+  };
+
+  const fetchProfiles = async () => {
+    try {
+      const response = await axios.get('http://localhost:5001/profiles');
+      // Convert the profiles array to an object for easier access
+      const profilesObject = response.data.reduce((acc, profile) => {
+        acc[profile.id] = profile;
+        return acc;
+      }, {});
+      setProfiles(profilesObject);
+    } catch (error) {
+      console.error('Error fetching profiles:', error);
     }
   };
 
@@ -54,30 +70,36 @@ const TaskManager = () => {
     }
   };
 
+  const handleRemoveTask = async (taskId) => {
+    try {
+      await axios.delete(`http://localhost:5001/tasks/${taskId}`);
+      fetchTasks();
+    } catch (error) {
+      console.error('Error removing task:', error);
+    }
+  };
+
   return (
     <div className="task-manager-container p-4">
       <h1 className="text-2xl font-bold mb-4">Task Manager</h1>
 
-      {/* Add Task Form */}
       <div className="mb-4">
         <h2 className="text-lg font-bold mb-2">Add Task</h2>
         <form>
-          {/* Profile */}
           <div className="mb-2">
             <label className="block text-sm font-semibold mb-1">Profile:</label>
             <select
               className="border rounded p-2 w-full"
               name="profileId"
-              value={newTask.profileId}
               onChange={handleInputChange}
+              value={newTask.profileId}
             >
               <option value="" disabled>Select Profile</option>
-              <option value="1">John Doe</option>
-              <option value="2">Jane Smith</option>
-              {/* Add more profiles as needed */}
+              {Object.values(profiles).map(profile => (
+                <option key={profile.id} value={profile.id}>{profile.name}</option>
+              ))}
             </select>
           </div>
-          {/* Task Name */}
           <div className="mb-2">
             <label className="block text-sm font-semibold mb-1">Task Name:</label>
             <input
@@ -88,7 +110,6 @@ const TaskManager = () => {
               onChange={handleInputChange}
             />
           </div>
-          {/* Description */}
           <div className="mb-2">
             <label className="block text-sm font-semibold mb-1">Description:</label>
             <textarea
@@ -98,7 +119,6 @@ const TaskManager = () => {
               onChange={handleInputChange}
             ></textarea>
           </div>
-          {/* Deadline */}
           <div className="mb-2">
             <label className="block text-sm font-semibold mb-1">Deadline:</label>
             <input
@@ -109,7 +129,6 @@ const TaskManager = () => {
               onChange={handleInputChange}
             />
           </div>
-          {/* Add Task Button */}
           <button
             type="button"
             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
@@ -120,7 +139,6 @@ const TaskManager = () => {
         </form>
       </div>
 
-      {/* Task List */}
       <div>
         <h2 className="text-lg font-bold mb-2">Task List</h2>
         <ul>
@@ -131,21 +149,26 @@ const TaskManager = () => {
                 <p>{task.description}</p>
                 <p>Deadline: {task.deadline}</p>
                 <p>Status: {task.status}</p>
+                <p>Profile: {profiles[task.profileId]?.name}</p> {/* Display profile name */}
               </div>
               <div>
-                {/* Button to mark task as complete */}
                 <button
-                  className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                  className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2"
                   onClick={() => handleUpdateTaskStatus(task.id, 'completed')}
                 >
                   Complete
                 </button>
-                {/* Button to mark task as pending */}
                 <button
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 mr-2"
                   onClick={() => handleUpdateTaskStatus(task.id, 'pending')}
                 >
                   Mark Pending
+                </button>
+                <button
+                  className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
+                  onClick={() => handleRemoveTask(task.id)}
+                >
+                  Remove
                 </button>
               </div>
             </li>
