@@ -1,6 +1,4 @@
-// src/Components/Login.js
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -8,6 +6,17 @@ const Login = ({ setLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user credentials are stored in localStorage
+    const storedEmail = localStorage.getItem('email');
+    const storedPassword = localStorage.getItem('password');
+
+    if (storedEmail && storedPassword) {
+      setEmail(storedEmail);
+      setPassword(storedPassword);
+    }
+  }, []);
 
   const handleLogin = async () => {
     try {
@@ -17,6 +26,10 @@ const Login = ({ setLoggedIn }) => {
       });
 
       if (response.data.loggedIn) {
+        // If login is successful, save credentials to localStorage
+        localStorage.setItem('email', email);
+        localStorage.setItem('password', password);
+
         setLoggedIn(true);
         navigate('/');
       } else {

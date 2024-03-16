@@ -1,13 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const TaskManager = () => {
-  // State for profiles
   const [profiles, setProfiles] = useState([]);
-  // State for tasks
   const [tasks, setTasks] = useState([]);
-  // State for new task
   const [newTask, setNewTask] = useState({
     profileId: '',
     name: '',
@@ -15,14 +11,13 @@ const TaskManager = () => {
     deadline: '',
     status: 'pending',
   });
+  const [filterCriteria, setFilterCriteria] = useState('all');
 
-  // Fetch profiles from backend when component mounts
   useEffect(() => {
     fetchProfiles();
     fetchTasks();
   }, []);
 
-  // Function to fetch profiles from backend
   const fetchProfiles = async () => {
     try {
       const response = await axios.get('http://localhost:5001/profiles');
@@ -32,7 +27,6 @@ const TaskManager = () => {
     }
   };
 
-  // Function to fetch tasks from backend
   const fetchTasks = async () => {
     try {
       const response = await axios.get('http://localhost:5001/tasks');
@@ -42,20 +36,15 @@ const TaskManager = () => {
     }
   };
 
-  // Function to handle input change in the form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewTask({ ...newTask, [name]: value });
   };
 
-  // Function to handle task submission
   const handleAddTask = async () => {
     try {
-      // Send POST request to backend to add task
       await axios.post('http://localhost:5001/tasks', newTask);
-      // Fetch updated task list
       fetchTasks();
-      // Reset form fields
       setNewTask({
         profileId: '',
         name: '',
@@ -68,31 +57,36 @@ const TaskManager = () => {
     }
   };
 
-  // Function to handle task status update
   const handleUpdateTaskStatus = async (taskId, newStatus) => {
     try {
-      // Send PUT request to backend to update task status
       await axios.put(`http://localhost:5001/tasks/${taskId}`, { status: newStatus });
-      // Fetch updated task list
       fetchTasks();
     } catch (error) {
       console.error('Error updating task status:', error);
     }
   };
 
-  // Function to handle task removal
   const handleRemoveTask = async (taskId) => {
     try {
-      // Send DELETE request to backend to remove task
       await axios.delete(`http://localhost:5001/tasks/${taskId}`);
-      // Fetch updated task list
       fetchTasks();
     } catch (error) {
       console.error('Error removing task:', error);
     }
   };
 
-  // JSX code for rendering the component
+  const handleFilterChange = (e) => {
+    setFilterCriteria(e.target.value);
+  };
+
+  const filteredTasks = tasks.filter(task => {
+    if (filterCriteria === 'all') {
+      return true;
+    } else {
+      return task.status === filterCriteria;
+    }
+  });
+
   return (
     <div className="task-manager-container p-4">
       <h1 className="text-2xl font-bold mb-4">Task Manager</h1>
@@ -161,17 +155,32 @@ const TaskManager = () => {
         </form>
       </div>
 
+      <div className="mb-4">
+        <h2 className="text-lg font-bold mb-2">Filter Tasks</h2>
+        <select
+          className="border rounded p-2"
+          value={filterCriteria}
+          onChange={handleFilterChange}
+        >
+          <option value="all">All Tasks</option>
+          <option value="pending">Pending Tasks</option>
+          <option value="completed">Completed Tasks</option>
+        </select>
+      </div>
+
       <div>
         <h2 className="text-lg font-bold mb-2">Task List</h2>
         <ul>
-          {tasks.map(task => (
+          {filteredTasks.map(task => (
             <li key={task.id} className="border p-2 mb-2 flex justify-between items-center">
-              <div>
-                <h3 className="font-semibold">{task.name}</h3>
-                <p>{task.description}</p>
-                <p>Deadline: {task.deadline}</p>
-                <p>Status: {task.status}</p>
-              </div>
+             <div>
+  <p style={{ fontWeight: 'bold' }}>Profile: {task.profile_name}</p>
+  <h2 style={{ fontSize: '1.2rem', marginTop: '10px' }}>Task: {task.name}</h2>
+  <p style={{ marginTop: '5px' }}>Description: {task.description}</p>
+  <p style={{ marginTop: '5px' }}>Deadline: {new Date(task.deadline).toLocaleDateString()}</p>
+  <p style={{ marginTop: '5px', color: task.status === 'completed' ? 'green' : 'red' }}>Status: {task.status}</p>
+</div>
+
               <div>
                 <button
                   className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
@@ -201,4 +210,3 @@ const TaskManager = () => {
 };
 
 export default TaskManager;
-

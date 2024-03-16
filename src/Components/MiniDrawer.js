@@ -25,6 +25,7 @@ import Dashboard from './Dashboard';
 import ProfileManager from './ProfileManager';
 import TaskManager from './TaskManager';
 import AccountMenu from './AccountMenu';
+import Settings from './Settings';
 
 const drawerWidth = 240;
 
@@ -186,6 +187,7 @@ export default function MiniDrawer() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<ProfileManager />} />
           <Route path="/task" element={<TaskManager />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </Box>
     </Box>
