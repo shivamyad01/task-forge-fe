@@ -2,15 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Navbar from './Components/Navbar';
 
-import MiniDrawer from './Components/MiniDrawer';
 import Dashboard from './Components/Dashboard';
 import ProfileManager from './Components/ProfileManager';
 import TaskManager from './Components/TaskManager';
 import Login from './Components/Login'; // Import the Login component
 import axios from 'axios';
+import Home from './Components/Home';
 
 const App = () => {
+  const[sidebar ,setSidebar] = useState(true);
+
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -25,15 +28,19 @@ const App = () => {
   }, []);
 
   return (
+    <>
+    
     <Router>
+      <Navbar setSidebar ={setSidebar} />
       <Routes>
-        <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
-        <Route path="/" element={isLoggedIn ? <MiniDrawer /> : <Navigate to="/login" />} />
-        <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path="/profile" element={isLoggedIn ? <ProfileManager /> : <Navigate to="/login" />} />
-        <Route path="/task" element={isLoggedIn ? <TaskManager /> : <Navigate to="/login" />} />
+     
+        <Route path="/" element={ <Home sidebar={sidebar}/>  } />
+        <Route path="/dashboard" element={ <Dashboard /> } />
+        <Route path="/profile" element={ <ProfileManager /> } />
+        <Route path="/task" element={ <TaskManager /> } />
       </Routes>
     </Router>
+    </>
   );
 };
 

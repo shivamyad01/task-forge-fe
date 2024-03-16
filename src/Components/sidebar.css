@@ -1,0 +1,14 @@
+.sidebaritem:hover{
+    background-color: #222831;
+    width: 160px;
+    height: 40px;
+    border-radius: 5px;
+    
+}
+.smallsidebar .sidebaritem:hover{
+    background-color: #222831;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    
+}
