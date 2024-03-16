@@ -2,7 +2,7 @@ import React from 'react';
 import userProfile from '../assets/ui/user-3-fill.png';
 import menuLine from '../assets/ui/menu-line.png';
 import { useNavigate } from 'react-router-dom';
-
+import './navbar.css'
 
 function Navbar({setSidebar}) {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ function Navbar({setSidebar}) {
     };
   
     return (
-      <div className='bg-gray2 w-full h-20 flex justify-between items-center p-4'>
+      <div className='navbar w-full h-20 flex justify-between items-center p-4'>
         <div className='left flex gap-4'>
            <img className='cursor-pointer filter invert' onClick={()=>setSidebar(prev =>!prev)} src={menuLine} alt="Menu" />
            <h1 className='text-white2 font-bold'>TaskForge</h1>

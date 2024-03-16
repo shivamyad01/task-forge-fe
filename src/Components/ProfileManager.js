@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 
 
-const ProfileManager = () => {
+const ProfileManager = ({sidebar}) => {
   const [profiles, setProfiles] = useState([
     { id: 1, name: 'John Doe', role: 'Developer' },
     { id: 2, name: 'Jane Smith', role: 'Designer' },
@@ -43,6 +44,9 @@ const ProfileManager = () => {
   };
 
   return (
+    <div className='flex'>
+    
+    <Sidebar sidebar={sidebar}/>
     <div className="profile-manager-container p-4">
       <h1 className="text-2xl font-bold mb-4">Profile Manager</h1>
 
@@ -117,6 +121,7 @@ const ProfileManager = () => {
           ))}
         </ul>
       </div>
+    </div>
     </div>
   );
 };

@@ -35,9 +35,9 @@ const App = () => {
       <Routes>
      
         <Route path="/" element={ <Home sidebar={sidebar}/>  } />
-        <Route path="/dashboard" element={ <Dashboard /> } />
-        <Route path="/profile" element={ <ProfileManager /> } />
-        <Route path="/task" element={ <TaskManager /> } />
+        <Route path="/dashboard" element={ <Dashboard sidebar={sidebar} /> } />
+        <Route path="/profile" element={ <ProfileManager sidebar={sidebar} /> } />
+        <Route path="/taskmanager" element={ <TaskManager sidebar={sidebar} /> } />
       </Routes>
     </Router>
     </>

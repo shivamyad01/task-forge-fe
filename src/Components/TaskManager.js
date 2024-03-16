@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 
-const TaskManager = () => {
+const TaskManager = ({sidebar}) => {
   const [tasks, setTasks] = useState([
     { id: 1, profileId: 1, name: 'Task 1', description: 'Description 1', deadline: '2024-03-15', status: 'pending' },
     { id: 2, profileId: 2, name: 'Task 2', description: 'Description 2', deadline: '2024-03-20', status: 'pending' },
@@ -47,6 +48,9 @@ const TaskManager = () => {
   };
 
   return (
+    <div className='flex'>
+    
+    <Sidebar sidebar={sidebar}/>
     <div className="task-manager-container p-4">
       <h1 className="text-2xl font-bold mb-4">Task Manager</h1>
 
@@ -164,6 +168,7 @@ const TaskManager = () => {
           ))}
         </ul>
       </div>
+    </div>
     </div>
   );
 };

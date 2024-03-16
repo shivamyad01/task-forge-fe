@@ -9,7 +9,10 @@ module.exports = {
         gray2 :'#222831',
         customgray: '#31363F',
         white2:'#EEEEEE',
-        hovercolor:'#76ABAE'
+        
+        customblue:'#008DDA',
+        customskyblue:'#41C9E2'
+       
       },
     },
   },

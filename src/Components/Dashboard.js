@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Sidebar from './Sidebar';
 
-const Dashboard = () => {
+const Dashboard = ({sidebar}) => {
   const [tasks, setTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState(0);
   const [pendingTasks, setPendingTasks] = useState(0);
@@ -30,7 +31,11 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="bg-gray-200 p-4 rounded-md">
+    <div className='flex'>
+    
+    <Sidebar sidebar={sidebar}/>
+    <div className="bg-gray-200 p-4 rounded-md w-full">
+      
       <h1 className="text-4xl font-bold mb-4">Task Dashboard</h1>
 
       <div className="bg-white p-4 rounded-md mb-4">
@@ -56,6 +61,7 @@ const Dashboard = () => {
         </button>
       
       </div>
+    </div>
     </div>
   );
 };
