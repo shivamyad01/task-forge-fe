@@ -31,7 +31,7 @@ const Login = ({ setLoggedIn }) => {
         localStorage.setItem('password', password);
 
         setLoggedIn(true);
-        navigate('/');
+        navigate('/dashboard');
       } else {
         alert('Incorrect email or password');
       }
