@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,47 +8,44 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const navigate = useNavigate();
-
   const handleLogout = () => {
-    // Perform logout logic (clear session, etc.)
-    // For simplicity, just navigate to the login page and setLoggedIn to false
-    // You might need to implement proper logout behavior based on your authentication mechanism
+    // Perform logout logic
+    // For simplicity, just navigate to the login page
     navigate('/login');
-    // Optionally, if you have a global state for authentication, you can update it here
   };
+
   return (
     <React.Fragment>
-      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-    
-        <Tooltip title="Account settings">
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? 'account-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-          >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-          </IconButton>
-        </Tooltip>
-      </Box>
+      <Tooltip title="Account settings">
+        <IconButton
+          onClick={handleClick}
+          size="small"
+          sx={{ ml: 2 }}
+          aria-controls={open ? 'account-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+        >
+          <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+        </IconButton>
+      </Tooltip>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -56,58 +53,33 @@ export default function AccountMenu() {
         onClose={handleClose}
         onClick={handleClose}
         PaperProps={{
-          elevation: 0,
+          elevation: 4, // Add elevation for a shadow effect
           sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: 1.5,
-            '& .MuiAvatar-root': {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
-            },
-            '&::before': {
-              content: '""',
-              display: 'block',
-              position: 'absolute',
-              top: 0,
-              right: 14,
-              width: 10,
-              height: 10,
-              bgcolor: 'background.paper',
-              transform: 'translateY(-50%) rotate(45deg)',
-              zIndex: 0,
-            },
+            width: '200px', // Adjust menu width
+            borderRadius: '8px', // Add border radius
           },
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> My account
+        <MenuItem component={Link} to="/profile" sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}>
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <Typography variant="body1">Profile</Typography>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}>
           <ListItemIcon>
-            <PersonAdd fontSize="small" />
+            <SettingsIcon />
           </ListItemIcon>
-          Add another account
+          <Typography variant="body1">Settings</Typography>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogout} sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}>
           <ListItemIcon>
-            <Settings fontSize="small" />
+            <LogoutIcon />
           </ListItemIcon>
-          Settings
-        </MenuItem>
-        <MenuItem onClick={handleLogout}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          Logout
+          <Typography variant="body1">Logout</Typography>
         </MenuItem>
       </Menu>
     </React.Fragment>
