@@ -86,7 +86,7 @@ const Login = ({ setLoggedIn }) => {
             />
           </div>
           <div className='flex w-full justify-between p-2 '> 
-            <h2 className='  text-[#C6C3C3] text-[13px] cursor-pointer font-medium'> Remember me</h2>
+            <h2 className='  text-[#C6C3C3] text-[13px] flex cursor-pointer font-medium'> <input className='mr-1 ' type="checkbox"></input>Remember me</h2>
             <h2 className='text-[#C6C3C3] text-[13px] cursor-pointer font-medium'> Forgot Password?</h2>
 
           </div>
