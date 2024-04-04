@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'remixicon/fonts/remixicon.css'
-
+import logo from '../Components/assets/logo.png'
 
 const Login = ({ setLoggedIn }) => {
   const [email, setEmail] = useState('');
@@ -53,7 +53,7 @@ const Login = ({ setLoggedIn }) => {
 
       
       <div>
-      <img src="public/Group 8.png" alt="Description of the image" />
+      <img src={logo} alt="Description of the image" />
       </div>
       <div className=" w-[28vw] h-[70vh] flex items-center pt-10 flex-col  space-y-8 bg-white rounded-[15px] shadow-lg">
         <h2 className="text-3xl  text-center text-black-900 font-semibold">Login Here</h2>
