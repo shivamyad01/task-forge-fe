@@ -26,6 +26,7 @@ import ProfileManager from './ProfileManager';
 import TaskManager from './TaskManager';
 import AccountMenu from './AccountMenu';
 import Settings from './Settings';
+import logo from '../Components/assets/logo.png';
 
 const drawerWidth = 240;
 
@@ -36,7 +37,6 @@ const openedMixin = (theme) => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
-  background: 'linear-gradient(to right, #4c669f, #3b5998)',
   color: '#fff',
 });
 
@@ -50,7 +50,6 @@ const closedMixin = (theme) => ({
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
-  background: 'linear-gradient(to right, #4c669f, #3b5998)',
   color: '#fff',
 });
 
@@ -59,7 +58,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -71,6 +69,8 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  backgroundColor: '#fff', // Background color set to white
+  color: '#000', // Text color set to black
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
@@ -111,6 +111,7 @@ export default function MiniDrawer() {
   };
 
   return (
+    <div class="animated-element">
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
@@ -127,9 +128,9 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Task Forge
-          </Typography>
+          <div className='w-48 pr-5 '>
+          <img src={logo} alt="TaskForge"/>
+          </div>
           <div style={{ marginLeft: 'auto' }}>
             <AccountMenu /> {/* AccountMenu will be on the completely right side */}
           </div>
@@ -142,6 +143,7 @@ export default function MiniDrawer() {
           </IconButton>
         </DrawerHeader>
         <Divider />
+        <div className='bg-white text-slate-400 text-2xl'>
         <List>
           <ListItem component={RouterLink} to="/dashboard">
             <ListItemButton>
@@ -167,6 +169,7 @@ export default function MiniDrawer() {
               <ListItemText primary="Task" />
             </ListItemButton>
           </ListItem>
+          <div className='mt-96'>
           <ListItem component={RouterLink} to="/settings">
             <ListItemButton>
               <ListItemIcon>
@@ -175,15 +178,14 @@ export default function MiniDrawer() {
               <ListItemText primary="Settings" />
             </ListItemButton>
           </ListItem>
+          </div>
         </List>
+        </div>
         <Divider />
-        {/* Add additional items or footer items here */}
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {/* Adjusted paddingTop to accommodate AppBar */}
         <DrawerHeader />
         <Routes>
-          
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<ProfileManager />} />
           <Route path="/task" element={<TaskManager />} />
@@ -191,5 +193,6 @@ export default function MiniDrawer() {
         </Routes>
       </Box>
     </Box>
+    </div>
   );
 }
