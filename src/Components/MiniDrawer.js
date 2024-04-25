@@ -201,7 +201,7 @@ export default function MiniDrawer() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<ProfileManager />} />
           <Route path="/task" element={<TaskManager />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings" element={<Setting />} />
         </Routes>
       </Box>
     </Box>
