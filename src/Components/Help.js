@@ -37,12 +37,14 @@ function Help() {
           </div>
         </div>
 
-        <div className="outline-2 outline-blue-500/50 border rounded-md w-80 p-2 font-semibold bg-color mb-2 ml-5 mr-auto flex items-center h-12 hover:bg-orange-300">
+        <div className="outline-2 outline-blue-500/50 border rounded-md w-80 p-2 font-semibold bg-color mb-2 h-12 hover:bg-orange-300 flex items-center justify-center">
           <div className="ml-2">
-            <i class="fa-solid fa-envelope" style={{ color: "#ffa500" }}></i>
+            <i className="fa-solid fa-envelope" style={{ color: "#ffa500" }}></i>
             <b className="ml-4 inner-text font-normal">EMAIL</b>
           </div>
         </div>
+
+
       </div>
     </div>
   );
