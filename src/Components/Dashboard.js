@@ -1,12 +1,15 @@
 // Dashboard.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState(0);
   const [pendingTasks, setPendingTasks] = useState(0);
   const [overdueTasks, setOverdueTasks] = useState(0);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     axios
@@ -28,7 +31,7 @@ const Dashboard = () => {
   }, []);
 
   const handleAddTask = () => {
-    console.log("Add new task clicked!");
+    navigate("/task");
   };
 
   return (

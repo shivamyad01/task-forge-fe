@@ -28,6 +28,7 @@ import AccountMenu from "./AccountMenu";
 import Setting from "./Setting";
 import Help from "./Help";
 import HelpCenterIcon from "@mui/icons-material/HelpCenter";
+import logo from "../Components/assets/logo.png"
 
 const drawerWidth = 240;
 
@@ -38,8 +39,6 @@ const openedMixin = (theme) => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
-  background: "linear-gradient(to right, #4c669f, #3b5998)",
-  color: "#fff",
 });
 
 const closedMixin = (theme) => ({
@@ -52,8 +51,6 @@ const closedMixin = (theme) => ({
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
-  background: "linear-gradient(to right, #4c669f, #3b5998)",
-  color: "#fff",
 });
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -69,10 +66,11 @@ const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(["width", "margin"], {
+  transition: theme.transitions.create(["width", "margin", "background-color"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  backgroundColor: "gray", // Change the background color here
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
@@ -82,6 +80,7 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
+
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -114,44 +113,51 @@ export default function MiniDrawer() {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Task Forge
-          </Typography>
-          <div style={{ marginLeft: "auto" }}>
-            <AccountMenu />{" "}
-            {/* AccountMenu will be on the completely right side */}
-          </div>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
+    <CssBaseline />
+    <AppBar position="fixed" open={open}>
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          sx={{
+            marginRight: 5,
+            ...(open && { display: "none" }),
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+        {/* Logo and title hidden when drawer is open */}
+        {!open && (
+          <>
+            <img src={logo} alt="Logo" style={{ marginRight: '10px', height: '40px' }} />
+         
+          </>
+        )}
+        <div style={{ marginLeft: "auto" }}>
+          <AccountMenu />{" "}
+          {/* AccountMenu will be on the completely right side */}
+        </div>
+      </Toolbar>
+    </AppBar>
+    <Drawer variant="permanent" open={open}>
+      <DrawerHeader>
+        {/* Logo and title shown when drawer is closed */}
+        <img src={logo} alt="Logo" style={{ marginRight: '10px', height: '40px' }} />
+        <IconButton onClick={handleDrawerClose}>
+          {theme.direction === "rtl" ? (
+            <ChevronRightIcon />
+          ) : (
+            <ChevronLeftIcon />
+          )}
+        </IconButton>
+      </DrawerHeader>
+  
         <Divider />
         <List>
           <ListItem component={RouterLink} to="/dashboard">
-            <ListItemButton>
+            <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
@@ -159,7 +165,7 @@ export default function MiniDrawer() {
             </ListItemButton>
           </ListItem>
           <ListItem component={RouterLink} to="/profile">
-            <ListItemButton>
+            <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
@@ -167,7 +173,7 @@ export default function MiniDrawer() {
             </ListItemButton>
           </ListItem>
           <ListItem component={RouterLink} to="/task">
-            <ListItemButton>
+            <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
               <ListItemIcon>
                 <TaskIcon />
               </ListItemIcon>
@@ -175,7 +181,7 @@ export default function MiniDrawer() {
             </ListItemButton>
           </ListItem>
           <ListItem component={RouterLink} to="/help">
-            <ListItemButton>
+            <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
               <ListItemIcon>
                 <HelpCenterIcon />
               </ListItemIcon>
@@ -183,7 +189,7 @@ export default function MiniDrawer() {
             </ListItemButton>
           </ListItem>
           <ListItem component={RouterLink} to="/setting">
-            <ListItemButton>
+            <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
