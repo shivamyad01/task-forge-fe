@@ -1,4 +1,3 @@
-// Dashboard.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -11,23 +10,29 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5001/tasks") // Adjust the URL accordingly
-      .then((response) => {
-        const taskData = response.data;
-        const completed = taskData.filter((task) => task.status === "completed").length;
-        const pending = taskData.filter((task) => task.status === "pending").length;
-        const overdue = taskData.filter((task) => task.status === "overdue").length;
-
-        setTasks(taskData);
-        setCompletedTasks(completed);
-        setPendingTasks(pending);
-        setOverdueTasks(overdue);
-      })
-      .catch((error) => {
-        console.error("Error fetching tasks:", error);
-      });
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const tasksResponse = await axios.get("http://localhost:5001/tasks");
+      const overdueResponse = await axios.get("http://localhost:5001/tasks/overdue");
+
+      const taskData = tasksResponse.data;
+      const overdueData = overdueResponse.data;
+
+      const completed = taskData.filter((task) => task.status === "completed").length;
+      const pending = taskData.filter((task) => task.status === "pending").length;
+      const overdue = overdueData.length; // Count of overdue tasks
+
+      setTasks(taskData);
+      setCompletedTasks(completed);
+      setPendingTasks(pending);
+      setOverdueTasks(overdue);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const handleAddTask = () => {
     navigate("/task");
@@ -68,7 +73,7 @@ const Dashboard = () => {
       </div>
       <div className="mt-6">
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
           onClick={handleAddTask}
         >
           Add New Task

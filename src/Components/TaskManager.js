@@ -88,15 +88,15 @@ const TaskManager = () => {
   });
 
   return (
-    <div className="task-manager-container p-4">
-      <h1 className="text-2xl font-bold mb-4">Task Manager</h1>
+    <div className="task-manager-wrapper p-4 bg-gray-100">
+      <div className="task-manager-container max-w-6xl mx-auto">
+        <h1 className="text-2xl font-semibold mb-4 text-left">Task Manager</h1>
 
-      <div className="mb-4">
-        <h2 className="text-lg font-bold mb-2">Add Task</h2>
-        <form>
-          <div className="mb-2">
-            <label className="block text-sm font-semibold mb-1">
-              Profile:
+        <div className="mb-8 bg-white rounded-lg p-6">
+          <h2 className="text-lg font-bold mb-4">Add Task</h2>
+          <form className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-semibold mb-1">Profile:</label>
               <select
                 className="border rounded p-2 w-full"
                 name="profileId"
@@ -108,11 +108,9 @@ const TaskManager = () => {
                   <option key={profile.id} value={profile.id}>{profile.name}</option>
                 ))}
               </select>
-            </label>
-          </div>
-          <div className="mb-2">
-            <label className="block text-sm font-semibold mb-1">
-              Task Name:
+            </div>
+            <div>
+              <label className="block text-sm font-semibold mb-1">Task Name:</label>
               <input
                 className="border rounded p-2 w-full"
                 type="text"
@@ -120,22 +118,18 @@ const TaskManager = () => {
                 value={newTask.name}
                 onChange={handleInputChange}
               />
-            </label>
-          </div>
-          <div className="mb-2">
-            <label className="block text-sm font-semibold mb-1">
-              Description:
+            </div>
+            <div className="col-span-2">
+              <label className="block text-sm font-semibold mb-1">Description:</label>
               <textarea
-                className="border rounded p-2 w-full"
+                className="border rounded p-2 w-full h-24 resize-none"
                 name="description"
                 value={newTask.description}
                 onChange={handleInputChange}
               ></textarea>
-            </label>
-          </div>
-          <div className="mb-2">
-            <label className="block text-sm font-semibold mb-1">
-              Deadline:
+            </div>
+            <div>
+              <label className="block text-sm font-semibold mb-1">Deadline:</label>
               <input
                 className="border rounded p-2 w-full"
                 type="date"
@@ -143,67 +137,67 @@ const TaskManager = () => {
                 value={newTask.deadline}
                 onChange={handleInputChange}
               />
-            </label>
-          </div>
-          <button
-            type="button"
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-            onClick={handleAddTask}
+            </div>
+            <div className="col-span-2 flex justify-start">
+              <button
+                type="button"
+                className="bg-orange-500 text-white px-7 py-2 rounded hover:bg-orange-600"
+                onClick={handleAddTask}
+              >
+                Add Task
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div className="mb-8">
+          <h2 className="text-lg font-bold mb-4">Filter Tasks</h2>
+          <select
+            className="border rounded p-2"
+            value={filterCriteria}
+            onChange={handleFilterChange}
           >
-            Add Task
-          </button>
-        </form>
-      </div>
+            <option value="all">All Tasks</option>
+            <option value="pending">Pending Tasks</option>
+            <option value="completed">Completed Tasks</option>
+          </select>
+        </div>
 
-      <div className="mb-4">
-        <h2 className="text-lg font-bold mb-2">Filter Tasks</h2>
-        <select
-          className="border rounded p-2"
-          value={filterCriteria}
-          onChange={handleFilterChange}
-        >
-          <option value="all">All Tasks</option>
-          <option value="pending">Pending Tasks</option>
-          <option value="completed">Completed Tasks</option>
-        </select>
-      </div>
-
-      <div>
-        <h2 className="text-lg font-bold mb-2">Task List</h2>
-        <ul>
-          {filteredTasks.map(task => (
-            <li key={task.id} className="border p-2 mb-2 flex justify-between items-center">
-             <div>
-  <p style={{ fontWeight: 'bold' }}>Profile: {task.profile_name}</p>
-  <h2 style={{ fontSize: '1.2rem', marginTop: '10px' }}>Task: {task.name}</h2>
-  <p style={{ marginTop: '5px' }}>Description: {task.description}</p>
-  <p style={{ marginTop: '5px' }}>Deadline: {new Date(task.deadline).toLocaleDateString()}</p>
-  <p style={{ marginTop: '5px', color: task.status === 'completed' ? 'green' : 'red' }}>Status: {task.status}</p>
-</div>
-
-              <div>
-                <button
-                  className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                  onClick={() => handleUpdateTaskStatus(task.id, 'completed')}
-                >
-                  Complete
-                </button>
-                <button
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                  onClick={() => handleUpdateTaskStatus(task.id, 'pending')}
-                >
-                  Mark Pending
-                </button>
-                <button
-                  className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
-                  onClick={() => handleRemoveTask(task.id)}
-                >
-                  Remove
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <div>
+          <h2 className="text-xl font-bold mb-4">Task List</h2>
+          <ul>
+            {filteredTasks.map(task => (
+              <li key={task.id} className="border p-4 mb-4 flex flex-col lg:flex-row justify-between items-start lg:items-center bg-white rounded-lg">
+                <div className="flex flex-col">
+                  <p className="font-bold text-lg mb-1">Profile: {task.profile_name}</p>
+                  <h2 className="text-lg font-semibold mb-1">Task: {task.name}</h2>
+                  <p className="text-sm mb-2">Description: {task.description}</p>
+                  <p className={`text-sm font-semibold ${task.status === 'completed' ? 'text-green-600' : 'text-red-600'}`}>Status: {task.status}</p>
+                </div>
+                <div className="flex mt-2 lg:mt-0">
+                  <button
+                    className={`bg-green-500 text-white px-3 py-2 rounded mr-2 hover:bg-green-600 focus:outline-none`}
+                    onClick={() => handleUpdateTaskStatus(task.id, 'completed')}
+                  >
+                    Complete
+                  </button>
+                  <button
+                    className={`bg-red-500 text-white px-3 py-2 rounded mr-2 hover:bg-red-600 focus:outline-none`}
+                    onClick={() => handleUpdateTaskStatus(task.id, 'pending')}
+                  >
+                    Mark Pending
+                  </button>
+                  <button
+                    className={`bg-gray-500 text-white px-3 py-2 rounded hover:bg-gray-600 focus:outline-none`}
+                    onClick={() => handleRemoveTask(task.id)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

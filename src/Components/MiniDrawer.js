@@ -193,7 +193,7 @@ export default function MiniDrawer() {
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
-              <ListItemText primary="Settings" />
+              <ListItemText primary="Setting" />
             </ListItemButton>
           </ListItem>
         </List>
@@ -208,7 +208,7 @@ export default function MiniDrawer() {
           <Route path="/profile" element={<ProfileManager />} />
           <Route path="/task" element={<TaskManager />} />
           <Route path="/help" element={<Help />} />
-          <Route path="/settings" element={<Setting />} />
+          <Route path="/setting" element={<Setting />} />
         </Routes>
       </Box>
     </Box>

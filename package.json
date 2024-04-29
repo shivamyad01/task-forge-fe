@@ -21,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-html2pdf": "^1.0.1",
     "react-modern-drawer": "^1.2.2",
+    "react-paginate": "^8.2.0",
     "react-router-dom": "^6.22.2",
     "react-scripts": "5.0.1",
     "remixicon": "^4.2.0",
