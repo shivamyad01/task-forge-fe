@@ -14,6 +14,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import toast from 'react-hot-toast';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,6 +33,7 @@ export default function AccountMenu() {
     // Perform logout logic
     // For simplicity, just navigate to the login page
     navigate("/login");
+    toast.success('Successfully logged out');
   };
 
   return (

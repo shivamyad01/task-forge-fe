@@ -3,7 +3,7 @@ import {  useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'remixicon/fonts/remixicon.css';
 import logo from '../Components/assets/logo.png';
-
+import toast from 'react-hot-toast';
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -19,19 +19,21 @@ const Register = () => {
         .then(response => {
           // Check the response and handle accordingly
           if (response.data.registered) {
-            alert('Registration successful');
+            
+            toast.success('Registration successful');
             navigate('/login'); // Redirect to login page after successful registration
           } else {
-            alert('Registration failed');
+            toast.error('Registration failed');
           }
         })
         .catch(error => {
           console.error('Error registering user:', error);
-          alert('Registration failed');
+         
+          toast.error('Registration failed');
         });
     } else {
       // Handle password mismatch, show an error message or highlight the fields
-      alert('Passwords do not match');
+      toast.error('Passwords do not match');
     }
   };
 

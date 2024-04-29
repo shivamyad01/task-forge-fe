@@ -4,6 +4,8 @@ import axios from 'axios';
 import 'remixicon/fonts/remixicon.css'
 import logo from '../Components/assets/logo.png'
 
+import toast from 'react-hot-toast';
+
 const Login = ({ setLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,12 +36,13 @@ const Login = ({ setLoggedIn }) => {
 
         setLoggedIn(true);
         navigate('/dashboard');
+        toast.success('Login successful');
       } else {
-        alert('Incorrect email or password');
+        toast.error('Incorrect email or password');
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      alert('Error logging in. Please try again.');
+      toast.error('Error logging in. Please try again.');
     }
   };
 
