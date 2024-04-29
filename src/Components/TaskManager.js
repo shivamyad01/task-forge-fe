@@ -2,17 +2,30 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const TaskManager = () => {
+  const [profiles, setProfiles] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState({ taskName: '', employee: '', deadline: '', status: 'Pending' , description: '' });
-  const [editingTask, setEditingTask] = useState(null);
-  const [alert, setAlert] = useState('');
+  const [newTask, setNewTask] = useState({
+    profileId: '',
+    name: '',
+    description: '',
+    deadline: '',
+    status: 'pending',
+  });
   const [filterCriteria, setFilterCriteria] = useState('all');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [tasksPerPage] = useState(3);
 
   useEffect(() => {
+    fetchProfiles();
     fetchTasks();
   }, []);
+
+  const fetchProfiles = async () => {
+    try {
+      const response = await axios.get('http://localhost:5001/profiles');
+      setProfiles(response.data);
+    } catch (error) {
+      console.error('Error fetching profiles:', error);
+    }
+  };
 
   const fetchTasks = async () => {
     try {
@@ -29,35 +42,27 @@ const TaskManager = () => {
   };
 
   const handleAddTask = async () => {
-    if (!newTask.taskName.trim() || !newTask.employee.trim() || !newTask.deadline.trim()) {
-      setAlert('Please fill all the details.');
-      return;
-    }
-
     try {
       await axios.post('http://localhost:5001/tasks', newTask);
       fetchTasks();
-      setNewTask({ taskName: '', employee: '', deadline: '', status: 'Pending' });
-      setAlert('');
+      setNewTask({
+        profileId: '',
+        name: '',
+        description: '',
+        deadline: '',
+        status: 'pending',
+      });
     } catch (error) {
       console.error('Error adding task:', error);
     }
   };
 
-  const handleEditTask = (taskId) => {
-    const taskToEdit = tasks.find(task => task.id === taskId);
-    setEditingTask(taskToEdit);
-    setNewTask({ taskName: taskToEdit.taskName, employee: taskToEdit.employee, deadline: taskToEdit.deadline, status: taskToEdit.status });
-  };
-
-  const handleUpdateTask = async () => {
+  const handleUpdateTaskStatus = async (taskId, newStatus) => {
     try {
-      await axios.put(`http://localhost:5001/tasks/${editingTask.id}`, newTask);
+      await axios.put(`http://localhost:5001/tasks/${taskId}`, { status: newStatus });
       fetchTasks();
-      setNewTask({ taskName: '', employee: '', deadline: '', status: 'Pending' });
-      setEditingTask(null);
     } catch (error) {
-      console.error('Error updating task:', error);
+      console.error('Error updating task status:', error);
     }
   };
 
@@ -74,107 +79,86 @@ const TaskManager = () => {
     setFilterCriteria(e.target.value);
   };
 
-  const addInitialTask = () => {
-    if (tasks.length === 0) {
-      setTasks([
-        { id: 1, taskName: 'Sample Task1', employee: 'Sample Employee1', deadline: '2024-12-31', status: 'Pending', description: 'Complete it asap' },
-        { id: 2, taskName: 'Sample Task2', employee: 'Sample Employee2', deadline: '2024-12-31', status: 'Pending' , description: 'Complete it asap' },
-        { id: 3, taskName: 'Sample Task3', employee: 'Sample Employee3', deadline: '2024-12-31', status: 'Pending' , description: 'Complete it asap' },
-        { id: 4, taskName: 'Sample Task4', employee: 'Sample Employee4', deadline: '2024-12-31', status: 'Pending' , description: 'Complete it asap'},
-        { id: 5, taskName: 'Sample Task5', employee: 'Sample Employee5', deadline: '2024-12-31', status: 'Pending' , description: 'Complete it asap'},
-        { id: 6, taskName: 'Sample Task6', employee: 'Sample Employee6', deadline: '2024-12-31', status: 'Pending' , description: 'Complete it asap'}
-      ]);
-    }
-  };
-
-  useEffect(() => {
-    addInitialTask();
-  }, []);
-
-  const indexOfLastTask = currentPage * tasksPerPage;
-  const indexOfFirstTask = indexOfLastTask - tasksPerPage;
-  const currentTasks = tasks.filter(task => {
+  const filteredTasks = tasks.filter(task => {
     if (filterCriteria === 'all') {
       return true;
-    } else if (filterCriteria === 'pending') {
-      return task.status === 'Pending';
-    } else if (filterCriteria === 'completed') {
-      return task.status === 'Completed';
+    } else {
+      return task.status === filterCriteria;
     }
-  }).slice(indexOfFirstTask, indexOfLastTask);
-
-  const paginate = pageNumber => setCurrentPage(pageNumber);
+  });
 
   return (
     <div className="task-manager-container p-4">
-      <h1 className="text-xl text-orange-400 mb-4 tracking-wide px-12 py-10 font-bold ">TASK MANAGER</h1>
-      <div className="border border-white rounded-2xl px-4 w-11/12 ml-12 bg-white mb-7">
-        <h2 className="text-lg font-bold mb-4 px-5 my-5">Add Tasks</h2>
-        {alert && <p className="text-red-500">{alert}</p>}
-        <form className='flex flex-wrap justify-between'>
-          {/* Input fields */}
-          <div className="mb-1 mr-5">
-            <label className="flex text-md font-semibold my-2 w-96 rounded-3xl px-4">
-              <input
-                className="border rounded-xl p-2 w-96 mb-1 border-slate-50 bg-indigo-50"
-                type="text"
-                name="taskName"
-                value={newTask.taskName}
-                placeholder='Task Name'
-                onChange={handleInputChange}
-              />
-            </label>
-          </div>
-          <div className="w-1/2 mb-2 mr-48">
-            <label className="flex text-md font-semibold my-2 w-96 px-2">
-              <input
-                className="border rounded-xl p-2 w-96 mb-1 border-slate-50 bg-indigo-50"
-                type="text"
-                name="employee"
-                placeholder='Employee Name'
-                value={newTask.employee}
-                onChange={handleInputChange}
-              />
-            </label>
-          </div>
-          <div className=" mb-2 mr-3">
-            <label className="flex text-md font-semibold my-2 w-96 rounded-3xl px-4">
-              <input
-                className="border rounded-xl p-2 w-96 mb-1 border-slate-50 bg-indigo-50"
-                type="text"
-                name="deadline"
-                value={newTask.deadline}
-                placeholder='Deadline (e.g., 08/04/24)'
-                onChange={handleInputChange}
-              />
-            </label>
-          </div>
-          <div className="w-1/2 mb-2 mr-10">
-            <label className="flex text-md font-semibold my-2 w-96 px-4">
+      <h1 className="text-2xl font-bold mb-4">Task Manager</h1>
+
+      <div className="mb-4">
+        <h2 className="text-lg font-bold mb-2">Add Task</h2>
+        <form>
+          <div className="mb-2">
+            <label className="block text-sm font-semibold mb-1">
+              Profile:
               <select
-                className="border rounded-xl p-2 w-96 mb-1 border-slate-50 bg-indigo-50"
-                name="status"
-                value={newTask.status}
+                className="border rounded p-2 w-full"
+                name="profileId"
+                value={newTask.profileId}
                 onChange={handleInputChange}
               >
-                <option value="Pending">Pending</option>
-                <option value="Completed">Completed</option>
+                <option value="" disabled>Select Profile</option>
+                {profiles.map(profile => (
+                  <option key={profile.id} value={profile.id}>{profile.name}</option>
+                ))}
               </select>
+            </label>
+          </div>
+          <div className="mb-2">
+            <label className="block text-sm font-semibold mb-1">
+              Task Name:
+              <input
+                className="border rounded p-2 w-full"
+                type="text"
+                name="name"
+                value={newTask.name}
+                onChange={handleInputChange}
+              />
+            </label>
+          </div>
+          <div className="mb-2">
+            <label className="block text-sm font-semibold mb-1">
+              Description:
+              <textarea
+                className="border rounded p-2 w-full"
+                name="description"
+                value={newTask.description}
+                onChange={handleInputChange}
+              ></textarea>
+            </label>
+          </div>
+          <div className="mb-2">
+            <label className="block text-sm font-semibold mb-1">
+              Deadline:
+              <input
+                className="border rounded p-2 w-full"
+                type="date"
+                name="deadline"
+                value={newTask.deadline}
+                onChange={handleInputChange}
+              />
             </label>
           </div>
           <button
             type="button"
-            className="button-3"
-            onClick={editingTask ? handleUpdateTask : handleAddTask}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            onClick={handleAddTask}
           >
-            <span>{editingTask ? 'Update' : 'Add'}</span>
+            Add Task
           </button>
         </form>
       </div>
-      <br />
-      <div className="all-tasks p-4 ml-12 bg-white border-white rounded-2xl w-11/12 mb-4" style={{ height: '400px' }}>
+
+      <div className="mb-4">
+        <h2 className="text-lg font-bold mb-2">Filter Tasks</h2>
         <select
-          className="border rounded-xl px-7 py-2 bg-indigo-50 m-5"
+          className="border rounded p-2"
           value={filterCriteria}
           onChange={handleFilterChange}
         >
@@ -182,66 +166,45 @@ const TaskManager = () => {
           <option value="pending">Pending Tasks</option>
           <option value="completed">Completed Tasks</option>
         </select>
-
-        <table className="w-full m-3">
-          {/* Table header */}
-          <thead>
-      <tr>
-        <th className="text-xs px-5 pr-1 text-left text-gray-400 ">Task Name</th>
-        <th className="text-xs px-12 pl-5 text-left text-gray-400 ">Employee Name</th>
-        <th className="text-xs px-15 pr-2 text-left text-gray-400 ">Deadline</th>
-        <th className="text-xs px-20 pl-16 text-left text-gray-400 ">Status</th>
-      </tr>
-    </thead>
-
-          <tbody style={{ overflowY: 'auto' }}>
-            {/* Table rows */}
-            {currentTasks.map((task, index) => (
-        <React.Fragment key={task.id}>
-          {index !== 0 && ( // Add line above the second row (except the first row)
-            <tr>
-              <td colSpan="5">
-                <hr className="w-full" />
-              </td>
-            </tr>
-          )}
-          <tr>
-            <td className="text-black px-6 py-2 font-semibold">{task.taskName}</td>
-            <td className="text-black px-1 py-2 font-semibold">{task.employee}</td>
-            <td className="text-black px-1 py-2 font-semibold">{task.deadline}</td>
-            <td className="text-black px-12 py-2 font-semibold">{task.status}</td>
-            <td className="text-black px-5 py-2 font-semibold">
-              <button className="bg-green-400 hover:bg-green-700 text-white font-bold py-1 px-2 rounded mr-6 shadow-custom" onClick={() => handleEditTask(task.id)}>Complete</button>
-              <button className="bg-orange-400 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded mr-6" onClick={() => handleRemoveTask(task.id)}>Pending</button>
-              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onClick={() => handleRemoveTask(task.id)}>Remove</button>
-            </td>
-          </tr>
-          <tr>
-                  <td colSpan="5" className="px-6 py-2 text-s text-gray-500 ">Description: {task.description}</td>
-                </tr>
-          <tr>
-            <td colSpan="5">
-              <hr className="w-full" />
-            </td>
-          </tr>
-        </React.Fragment>
-      ))}
-
-          </tbody>
-        </table>
       </div>
 
-      {tasksPerPage < tasks.length && (
-        <div className="pagination">
-          <ul className="flex justify-center mt-4">
-            {[...Array(Math.ceil(tasks.length / tasksPerPage))].map((_, index) => (
-              <li key={index} className={currentPage === index + 1 ? 'mr-2 font-bold text-white border-black bg-orange-400 w-7 text-center' : 'mr-2'}>
-                <button onClick={() => paginate(index + 1)}>{index + 1}</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div>
+        <h2 className="text-lg font-bold mb-2">Task List</h2>
+        <ul>
+          {filteredTasks.map(task => (
+            <li key={task.id} className="border p-2 mb-2 flex justify-between items-center">
+             <div>
+  <p style={{ fontWeight: 'bold' }}>Profile: {task.profile_name}</p>
+  <h2 style={{ fontSize: '1.2rem', marginTop: '10px' }}>Task: {task.name}</h2>
+  <p style={{ marginTop: '5px' }}>Description: {task.description}</p>
+  <p style={{ marginTop: '5px' }}>Deadline: {new Date(task.deadline).toLocaleDateString()}</p>
+  <p style={{ marginTop: '5px', color: task.status === 'completed' ? 'green' : 'red' }}>Status: {task.status}</p>
+</div>
+
+              <div>
+                <button
+                  className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                  onClick={() => handleUpdateTaskStatus(task.id, 'completed')}
+                >
+                  Complete
+                </button>
+                <button
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                  onClick={() => handleUpdateTaskStatus(task.id, 'pending')}
+                >
+                  Mark Pending
+                </button>
+                <button
+                  className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
+                  onClick={() => handleRemoveTask(task.id)}
+                >
+                  Remove
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

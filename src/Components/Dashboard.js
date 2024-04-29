@@ -10,7 +10,6 @@ const Dashboard = () => {
   const [overdueTasks, setOverdueTasks] = useState(0);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     axios
       .get("http://localhost:5001/tasks") // Adjust the URL accordingly
@@ -35,49 +34,45 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="bg-color p-4 rounded-2xl">
-      <h1 className="font-poppins">Task Dashboard</h1>
-      <br />
-      <div className="bg-white p-4 rounded-2xl mb-4">
-        <h2 className="text-2xl font-bold mb-2 font-normal">Task Overview</h2>
-        <br />
-        <div className="mb-1.5 flex flex-wrap gap-4">
-          <div className="outline-2 outline-blue-500/50 border rounded-md w-full md:w-60 p-2 font-semibold bg-color mb-2 md:mb-0 md:mr-12 flex items-center h-12">
-            <p className="inner-text">Total Tasks: {tasks.length}</p>
-            <div className="ml-20">
-              <i className="fa-regular fa-pen-to-square fa-beat-fade"></i>
-            </div>
+    <div className="bg-gray-100 p-6 rounded-lg shadow-md">
+      <h1 className="text-2xl font-semibold mb-4">Task Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg p-4 flex items-center justify-between">
+          <div>
+            <p className="font-semibold">Total Tasks</p>
+            <p>{tasks.length}</p>
           </div>
-          <div className="outline-2 outline-blue-500/50 border rounded-md w-full md:w-60 p-2 font-semibold bg-color mb-2 md:mb-0 md:mr-12 flex items-center h-12">
-            <p className="inner-text">Completed: {completedTasks}</p>
-            <div className="ml-20">
-              <i className="fa-regular fa-pen-to-square fa-beat-fade"></i>
-            </div>
-          </div>
-          <div className="outline-2 outline-blue-500/50 border rounded-md w-full md:w-60 p-2 font-semibold bg-color mb-2 md:mb-0 md:mr-12 flex items-center h-12">
-            <p className="inner-text">In Progress: {pendingTasks}</p>
-            <div className="ml-20">
-              <i className="fa-regular fa-pen-to-square fa-beat-fade"></i>
-            </div>
-          </div>
-          <div className="outline-2 outline-blue-500/50 border rounded-md w-full md:w-60 p-2 font-semibold bg-color flex items-center h-12">
-            <p className="inner-text">Overdue: {overdueTasks}</p>
-            <div className="ml-20">
-              <i className="fa-regular fa-pen-to-square fa-beat-fade"></i>
-            </div>
-          </div>
+          <i className="far fa-check-circle text-green-500 text-2xl"></i>
         </div>
-        <br />
-        <div>
+        <div className="bg-white rounded-lg p-4 flex items-center justify-between">
+          <div>
+            <p className="font-semibold">Completed</p>
+            <p>{completedTasks}</p>
+          </div>
+          <i className="far fa-check-circle text-green-500 text-2xl"></i>
+        </div>
+        <div className="bg-white rounded-lg p-4 flex items-center justify-between">
+          <div>
+            <p className="font-semibold">In Progress</p>
+            <p>{pendingTasks}</p>
+          </div>
+          <i className="far fa-spinner text-blue-500 text-2xl"></i>
+        </div>
+        <div className="bg-white rounded-lg p-4 flex items-center justify-between">
+          <div>
+            <p className="font-semibold">Overdue</p>
+            <p>{overdueTasks}</p>
+          </div>
+          <i className="far fa-clock text-red-500 text-2xl"></i>
+        </div>
+      </div>
+      <div className="mt-6">
         <button
-    className="btn-background-color border-yellow-600 btn-font-color px-4 py-2 rounded hover:bg-yellow-400 border-yellow-600 md:w-50 ml-5"
-    onClick={handleAddTask}
-    style={{ backgroundColor: 'orange' }}
->
-    Add new task
-</button>
-
-        </div>
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          onClick={handleAddTask}
+        >
+          Add New Task
+        </button>
       </div>
     </div>
   );
