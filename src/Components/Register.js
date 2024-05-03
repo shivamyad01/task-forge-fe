@@ -43,12 +43,13 @@ const Register = () => {
   const handleRegister = () => {
     if (!validateForm()) return;
 
-    // If form is valid, proceed with registration logic
     axios.post('http://localhost:5001/register', { name, email, password })
       .then(response => {
         if (response.data.registered) {
           toast.success('Registration successful');
-          navigate('/login'); // Redirect to login page after successful registration
+          navigate('/login');
+        } else if (response.data.alreadyExists) {
+          toast.error('User with this email already exists');
         } else {
           toast.error('Registration failed');
         }
