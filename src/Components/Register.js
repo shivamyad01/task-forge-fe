@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'remixicon/fonts/remixicon.css';
 import logo from '../Components/assets/logo.png';
 import toast from 'react-hot-toast';
+
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -11,30 +12,51 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = () => {
-    // Perform registration logic here
-    if (password === confirmPassword) {
-      // Make a POST request to the registration endpoint
-      axios.post('http://localhost:5001/register', { name, email, password })
-        .then(response => {
-          // Check the response and handle accordingly
-          if (response.data.registered) {
-            
-            toast.success('Registration successful');
-            navigate('/login'); // Redirect to login page after successful registration
-          } else {
-            toast.error('Registration failed');
-          }
-        })
-        .catch(error => {
-          console.error('Error registering user:', error);
-         
-          toast.error('Registration failed');
-        });
-    } else {
-      // Handle password mismatch, show an error message or highlight the fields
-      toast.error('Passwords do not match');
+  const validateForm = () => {
+    // Basic name validation
+    if (!name.trim()) {
+      toast.error('Please enter your name');
+      return false;
     }
+
+    // Basic email validation
+    if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) {
+      toast.error('Please enter a valid email address');
+      return false;
+    }
+
+    // Basic password validation
+    if (!password.trim()) {
+      toast.error('Please enter a password');
+      return false;
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleRegister = () => {
+    if (!validateForm()) return;
+
+    // If form is valid, proceed with registration logic
+    axios.post('http://localhost:5001/register', { name, email, password })
+      .then(response => {
+        if (response.data.registered) {
+          toast.success('Registration successful');
+          navigate('/login'); // Redirect to login page after successful registration
+        } else {
+          toast.error('Registration failed');
+        }
+      })
+      .catch(error => {
+        console.error('Error registering user:', error);
+        toast.error('Registration failed');
+      });
   };
 
   return (
