@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'remixicon/fonts/remixicon.css';
 import logo from '../Components/assets/logo.png';
-
+import { API_BASE_URL } from '../utils/constant';
 import toast from 'react-hot-toast';
 
 const Login = ({ setLoggedIn }) => {
@@ -32,7 +32,7 @@ const Login = ({ setLoggedIn }) => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post('http://localhost:5001/checkLogin', {
+      const response = await axios.post(`${API_BASE_URL}/checkLogin`, {
         email,
         password,
       });

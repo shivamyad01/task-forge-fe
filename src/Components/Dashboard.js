@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { API_BASE_URL } from "../utils/constant";
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -15,8 +15,8 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
-      const tasksResponse = await axios.get("http://localhost:5001/tasks");
-      const overdueResponse = await axios.get("http://localhost:5001/tasks/overdue");
+      const tasksResponse = await axios.get(`${API_BASE_URL}/tasks`);
+      const overdueResponse = await axios.get(`${API_BASE_URL}/tasks/overdue`);
 
       const taskData = tasksResponse.data;
       const overdueData = overdueResponse.data;

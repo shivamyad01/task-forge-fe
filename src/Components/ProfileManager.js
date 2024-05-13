@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProfileList from './ProfileList'; // Import the ProfileList component
-
+import { API_BASE_URL } from '../utils/constant';
 const ProfileManager = () => {
   const [profiles, setProfiles] = useState([]);
   const [newProfile, setNewProfile] = useState({ name: '', role: '' });
@@ -14,12 +14,14 @@ const ProfileManager = () => {
 
   const fetchProfiles = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/profiles');
+      const response = await axios.get(`${API_BASE_URL}/profiles`);
       setProfiles(response.data);
     } catch (error) {
       console.error('Error fetching profiles:', error);
     }
   };
+
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,7 +35,7 @@ const ProfileManager = () => {
     }
   
     try {
-      await axios.post('http://localhost:5001/profiles', newProfile);
+      await axios.post(`${API_BASE_URL}/profiles`, newProfile);
       setNewProfile({ name: '', role: '' });
       fetchProfiles();
       showNotification('Profile added successfully', 'success');
@@ -52,7 +54,7 @@ const ProfileManager = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      await axios.put(`http://localhost:5001/profiles/${editingProfile.id}`, newProfile);
+      await axios.put(`${API_BASE_URL}/profiles/${editingProfile.id}`, newProfile);
       fetchProfiles();
       setNewProfile({ name: '', role: '' });
       setEditingProfile(null);
@@ -65,7 +67,7 @@ const ProfileManager = () => {
 
   const handleRemoveProfile = async (profileId) => {
     try {
-      await axios.delete(`http://localhost:5001/profiles/${profileId}`);
+      await axios.delete(`${API_BASE_URL}/profiles/${profileId}`);
       fetchProfiles();
       showNotification('Profile removed successfully', 'success');
     } catch (error) {

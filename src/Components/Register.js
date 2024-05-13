@@ -4,6 +4,7 @@ import axios from 'axios';
 import 'remixicon/fonts/remixicon.css';
 import logo from '../Components/assets/logo.png';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../utils/constant';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -43,7 +44,7 @@ const Register = () => {
   const handleRegister = () => {
     if (!validateForm()) return;
 
-    axios.post('http://localhost:5001/register', { name, email, password })
+    axios.post(`${API_BASE_URL}/register`, { name, email, password })
       .then(response => {
         if (response.data.registered) {
           toast.success('Registration successful');
