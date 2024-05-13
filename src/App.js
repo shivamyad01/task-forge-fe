@@ -1,12 +1,7 @@
 // App.js
 
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
 
 import MiniDrawer from "./Components/MiniDrawer";
@@ -17,7 +12,7 @@ import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Setting from "./Components/Setting";
 import Help from "./Components/Help";
-// Import Settings component
+import Settings from "./Components/Setting"; // Import Settings component
 
 const App = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -54,9 +49,9 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<ProfileManager />} />
             <Route path="/task" element={<TaskManager />} />
-            <Route path="/help" element={<Help />} />{" "}
+            <Route path="/help" element={<Help />} />
             <Route path="/setting" element={<Setting />} />
-            {/* Include Settings component route */}
+            <Route path="/settings" element={<Settings />} /> {/* Include Settings component route */}
             {/* Add more routes as needed */}
           </Route>
         ) : (
