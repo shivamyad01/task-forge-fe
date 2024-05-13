@@ -10,48 +10,13 @@ import ProfileManager from "./Components/ProfileManager";
 import TaskManager from "./Components/TaskManager";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
+import Setting from "./Components/Setting";
 import Help from "./Components/Help";
 import Settings from "./Components/Setting"; // Import Settings component
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-
-
-const lightTheme = createTheme({
-  palette: {
-    mode: 'light',
-  },
-});
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#64B5F6', // Change primary color to a shade of blue
-    },
-    background: {
-      default: '#121212', // Change default background color to a darker shade
-      paper: '#1E1E1E', // Change paper background color to a slightly lighter shade
-    },
-    text: {
-      primary: '#0062ff', // Change primary text color to white
-      secondary: '#CCCCCC', // Change secondary text color to a light gray
-    },
-    // You can define more colors as needed
-  },
-});
-
 
 const App = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [mode, setMode] = useState('light');
-
-  const toggleMode = () => {
-    setMode(mode === 'light' ? 'dark' : 'light');
-  };
-
-  const theme = mode === 'light' ? lightTheme : darkTheme;
-
 
   useEffect(() => {
     // Check if the user is logged in by calling a backend route
@@ -74,28 +39,26 @@ const App = () => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <Routes>
-          {isLoggedIn ? (
-            <Route path="/" element={<MiniDrawer toggleMode={toggleMode} mode={mode} />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/profile" element={<ProfileManager />} />
-              <Route path="/task" element={<TaskManager />} />
-              <Route path="/help" element={<Help />} />
-              <Route path="/setting" element={<Settings toggleMode={toggleMode} />} />
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
+        <Route path="/register" element={<Register />} />
 
-            </Route>
-          ) : (
-            <Route path="*" element={<Navigate to="/login" />} />
-          )}
-          <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </Router>
-     
-    </ThemeProvider>
+        {isLoggedIn ? (
+          <Route path="/" element={<MiniDrawer />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<ProfileManager />} />
+            <Route path="/task" element={<TaskManager />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/setting" element={<Setting />} />
+            <Route path="/settings" element={<Settings />} /> {/* Include Settings component route */}
+            {/* Add more routes as needed */}
+          </Route>
+        ) : (
+          <Route path="*" element={<Navigate to="/login" />} />
+        )}
+      </Routes>
+    </Router>
   );
 };
 

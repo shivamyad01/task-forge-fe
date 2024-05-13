@@ -30,10 +30,6 @@ import Help from "./Help";
 import HelpCenterIcon from "@mui/icons-material/HelpCenter";
 import logo from "../Components/assets/logo.png"
 
-
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -103,7 +99,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MiniDrawer({  mode, toggleMode }) {
+export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = useState(true); // Keep the drawer open by default
 
@@ -139,22 +135,10 @@ export default function MiniDrawer({  mode, toggleMode }) {
          
           </>
         )}
-          
-          <div style={{ display: "flex", marginLeft: "auto" }}>
-  <List>
-    <ListItem button onClick={toggleMode}>
-      <ListItemIcon>
-        {mode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
-      </ListItemIcon>
-      <ListItemText primary={mode === 'light' ? 'Dark Mode' : 'Light Mode'} />
-    </ListItem>
-    {/* Add other list items for navigation here */}
-  </List>
-  <div className="mt-3" >
-    <AccountMenu />
-  </div>
-</div>
-
+        <div style={{ marginLeft: "auto" }}>
+          <AccountMenu />{" "}
+          {/* AccountMenu will be on the completely right side */}
+        </div>
       </Toolbar>
     </AppBar>
     <Drawer variant="permanent" open={open}>
@@ -168,7 +152,6 @@ export default function MiniDrawer({  mode, toggleMode }) {
             <ChevronLeftIcon />
           )}
         </IconButton>
-      
       </DrawerHeader>
   
         <Divider />
@@ -231,9 +214,3 @@ export default function MiniDrawer({  mode, toggleMode }) {
     </Box>
   );
 }
-
-
-
-
-
-
