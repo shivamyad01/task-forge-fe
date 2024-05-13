@@ -31,18 +31,7 @@ const Setting = () => {
       <div className="p-6 max-w-md w-full bg-white rounded-xl shadow-md space-y-6">
         <h2 className="text-3xl font-bold text-center mb-6">Settings</h2>
         
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold">Theme</h3>
-          <select
-            value={theme}
-            onChange={handleThemeChange}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-200 focus:ring-opacity-50"
-          >
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </div>
-        
+     
         <div className="space-y-2">
           <h3 className="text-lg font-semibold">Language</h3>
           <select
