@@ -34,26 +34,26 @@ import logo from "../Components/assets/logo.png"
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-const drawerWidth = 240;
+const drawerWidthOpen = 240; // Width of the drawer when it's open
+const drawerWidthClosed = 90; // Width of the drawer when it's closed
 
 const openedMixin = (theme) => ({
-  width: drawerWidth,
+  width: drawerWidthOpen,
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
 });
-
 const closedMixin = (theme) => ({
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: drawerWidthClosed, // Set the width to drawerWidthClosed when the drawer is closed
   [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
+    width: drawerWidthClosed, // Adjust width for breakpoints if needed
   },
 });
 
@@ -76,8 +76,8 @@ const AppBar = styled(MuiAppBar, {
   }),
   backgroundColor: "gray", // Change the background color here
   ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidthOpen,
+    width: `calc(100% - ${drawerWidthOpen}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -85,11 +85,10 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
-  width: drawerWidth,
+  width: open ? drawerWidthOpen : drawerWidthClosed, // Set the width based on whether the drawer is open or closed
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
@@ -102,7 +101,6 @@ const Drawer = styled(MuiDrawer, {
     "& .MuiDrawer-paper": closedMixin(theme),
   }),
 }));
-
 export default function MiniDrawer({  mode, toggleMode }) {
   const theme = useTheme();
   const [open, setOpen] = useState(true); // Keep the drawer open by default
@@ -160,7 +158,7 @@ export default function MiniDrawer({  mode, toggleMode }) {
     <Drawer variant="permanent" open={open}>
       <DrawerHeader>
         {/* Logo and title shown when drawer is closed */}
-        <img src={logo} alt="Logo" style={{ marginRight: '10px', height: '40px' }} />
+        <img src={logo} alt="Logo" style={{  height: '40px' }} />
         <IconButton onClick={handleDrawerClose}>
           {theme.direction === "rtl" ? (
             <ChevronRightIcon />
