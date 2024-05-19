@@ -38,8 +38,9 @@ const Login = ({ setLoggedIn }) => {
       });
 
       if (response.data.loggedIn) {
-        localStorage.setItem('email', email);
-        localStorage.setItem('password', password);
+        const token = response.data.token;
+        localStorage.setItem('token', token); // Store token in localStorage
+       
         setLoggedIn(true);
         navigate('/dashboard');
         toast.success('Login successful');

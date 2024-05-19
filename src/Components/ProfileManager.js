@@ -28,23 +28,42 @@ const ProfileManager = () => {
     setNewProfile({ ...newProfile, [name]: value });
   };
 
-  const handleAddProfile = async () => {
-    if (!newProfile.name.trim() || !newProfile.role.trim()) {
-      showNotification('Name and role fields cannot be empty', 'error');
+// Function to handle adding a profile with authorization
+const handleAddProfile = async () => {
+  if (!newProfile.name.trim() || !newProfile.role.trim()) {
+    showNotification('Name and role fields cannot be empty', 'error');
+    return;
+  }
+
+  try {
+    // Obtain token from localStorage
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      // Handle case when token is not available
+      // You might redirect user to login page or handle it based on your app's logic
+      console.error('Access token not found in localStorage');
       return;
     }
-  
-    try {
-      await axios.post(`${API_BASE_URL}/profiles`, newProfile);
-      setNewProfile({ name: '', role: '' });
-      fetchProfiles();
-      showNotification('Profile added successfully', 'success');
-    } catch (error) {
-      console.error('Error adding profile:', error);
-      showNotification('Failed to add profile', 'error');
-    }
-  };
-  
+
+    // Include token in request headers
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    // Make API request with authorization headers
+    await axios.post(`${API_BASE_URL}/profiles`, newProfile, config);
+    setNewProfile({ name: '', role: '' });
+    fetchProfiles();
+    showNotification('Profile added successfully', 'success');
+  } catch (error) {
+    console.error('Error adding profile:', error);
+    showNotification('Failed to add profile', 'error');
+  }
+};
+
 
   const handleEditProfile = (profileId) => {
     const profileToEdit = profiles.find(profile => profile.id === profileId);
