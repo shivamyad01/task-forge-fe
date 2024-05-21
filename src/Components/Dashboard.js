@@ -1,7 +1,11 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../utils/constant";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+ChartJS.register(ArcElement, Tooltip, Legend);
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -25,9 +29,12 @@ const Dashboard = () => {
       const pending = taskData.filter((task) => task.status === "pending").length;
       const overdue = overdueData.length; // Count of overdue tasks
 
+      // Filter out overdue tasks from pending tasks
+      const pendingNotOverdue = taskData.filter((task) => task.status === "pending" && !overdueData.find(overdueTask => overdueTask.id === task.id)).length;
+
       setTasks(taskData);
       setCompletedTasks(completed);
-      setPendingTasks(pending);
+      setPendingTasks(pendingNotOverdue); // Set pending tasks without overdue ones
       setOverdueTasks(overdue);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -37,9 +44,33 @@ const Dashboard = () => {
   const handleAddTask = () => {
     navigate("/task");
   };
-
+  const pieData = {
+    labels: ["Completed", "In Progress", "Overdue"],
+    datasets: [
+      {
+        data: [completedTasks, pendingTasks, overdueTasks],
+        backgroundColor: ["#4CAF50", "#2196F3", "#f44336"],
+        hoverBackgroundColor: ["#66bb6a", "#42a5f5", "#ef5350"]
+      }
+    ]
+  };
+  const pieOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          font: {
+            size: 14
+          },
+          color: '#333'
+        }
+      }
+    }
+  };
   return (
-    <div className="bg-gray-100 p-6 rounded-lg shadow-md">
+    <div className="bg-gray-100 p-6 rounded-lg shadow-md ">
       <h1 className="text-2xl font-semibold mb-4">Task Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-lg p-4 flex items-center justify-between">
@@ -79,8 +110,13 @@ const Dashboard = () => {
           Add New Task
         </button>
       </div>
+      <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-xl font-semibold mb-4">Task Status Distribution</h2>
+        <div style={{ width: "100%", height: "400px" }}>
+          <Pie data={pieData} options={pieOptions} />
+        </div>
+      </div>
     </div>
   );
 };
-
 export default Dashboard;

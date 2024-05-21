@@ -28,7 +28,7 @@ const TaskList = ({ tasks, handleUpdateTaskStatus, handleRemoveTask, filterCrite
       <div>
         <h2 className="text-xl font-bold mb-4">Task List</h2>
         <ul style={{ maxHeight: '480px', overflowY: 'auto' }}>
-          {filteredTasks.map(task => (
+          {filteredTasks.slice().reverse().map(task => (
             <li key={task.id} className="border p-4 mb-4 flex flex-col lg:flex-row justify-between items-start lg:items-center bg-white rounded-lg">
               <div className="flex flex-col">
                 <p className="font-bold text-lg mb-1">Profile: {task.profile_name}</p>

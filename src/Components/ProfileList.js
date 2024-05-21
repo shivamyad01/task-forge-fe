@@ -7,7 +7,7 @@ const ProfileList = ({ profiles, handleEditProfile, handleRemoveProfile }) => {
      <h2 className="text-lg font-bold mb-4">Profile List</h2>
       
       <ul className="space-y-4 profiles-list overflow-y-auto max-h-80">
-        {profiles.map(profile => (
+        {profiles.slice().reverse().map(profile => (
           <li key={profile.id} className="flex items-center justify-between bg-white shadow-md rounded-lg p-4">
             <div className="flex items-center">
               <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center mr-4">
