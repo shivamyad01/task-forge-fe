@@ -1,9 +1,5 @@
-// App.js
-
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import axios from "axios";
-
 import MiniDrawer from "./Components/MiniDrawer";
 import Dashboard from "./Components/Dashboard";
 import ProfileManager from "./Components/ProfileManager";
@@ -14,7 +10,6 @@ import Help from "./Components/Help";
 import Settings from "./Components/Setting"; // Import Settings component
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-
 
 const lightTheme = createTheme({
   palette: {
@@ -40,11 +35,18 @@ const darkTheme = createTheme({
   },
 });
 
-
 const App = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [mode, setMode] = useState('light');
+  const [mode, setMode] = useState(() => {
+    // Check if mode is stored in local storage
+    const savedMode = localStorage.getItem('mode');
+    return savedMode ? savedMode : 'light'; // Default to light mode if not found
+  });
+
+  useEffect(() => {
+    // Update local storage when mode changes
+    localStorage.setItem('mode', mode);
+  }, [mode]);
 
   const toggleMode = () => {
     setMode(mode === 'light' ? 'dark' : 'light');
@@ -52,49 +54,30 @@ const App = () => {
 
   const theme = mode === 'light' ? lightTheme : darkTheme;
 
-
-  useEffect(() => {
-    // Check if the user is logged in by calling a backend route
-    axios
-      .get("http://localhost:5001/checkLogin")
-      .then((response) => {
-        if (response.data.loggedIn) {
-          setLoggedIn(true);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error checking login status:", error);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const ProtectedRoute = ({ element, ...rest }) => {
+    return isLoggedIn ? (
+      <Route {...rest} element={element} />
+    ) : (
+      <Navigate to="/login" />
+    );
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
         <Routes>
-          {isLoggedIn ? (
-            <Route path="/" element={<MiniDrawer toggleMode={toggleMode} mode={mode} />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/profile" element={<ProfileManager />} />
-              <Route path="/task" element={<TaskManager />} />
-              <Route path="/help" element={<Help />} />
-              <Route path="/setting" element={<Settings toggleMode={toggleMode} />} />
-
-            </Route>
-          ) : (
-            <Route path="*" element={<Navigate to="/login" />} />
-          )}
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/" element={<MiniDrawer toggleMode={toggleMode} mode={mode} />}>
+            <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
+            <Route path="/profile" element={<ProtectedRoute element={<ProfileManager />} />} />
+            <Route path="/task" element={<ProtectedRoute element={<TaskManager />} />} />
+            <Route path="/help" element={<ProtectedRoute element={<Help />} />} />
+            <Route path="/setting" element={<ProtectedRoute element={<Settings toggleMode={toggleMode} />} />} />
+          </Route>
         </Routes>
       </Router>
-     
     </ThemeProvider>
   );
 };
