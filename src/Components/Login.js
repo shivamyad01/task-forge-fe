@@ -32,7 +32,7 @@ const Login = ({ setLoggedIn }) => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/checkLogin`, {
+      const response = await axios.post(`${API_BASE_URL}/api/users/login`, {
         email,
         password,
       });

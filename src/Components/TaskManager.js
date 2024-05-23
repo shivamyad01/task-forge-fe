@@ -3,7 +3,6 @@ import axios from 'axios';
 import TaskList from './TaskList'; // Import the TaskList component
 import { API_BASE_URL } from '../utils/constant';
 
-
 const TaskManager = () => {
   const [profiles, setProfiles] = useState([]);
   const [tasks, setTasks] = useState([]);
@@ -23,7 +22,7 @@ const TaskManager = () => {
 
   const fetchProfiles = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/profiles`); // Using API_BASE_URL
+      const response = await axios.get(`${API_BASE_URL}/api/profiles`);
       setProfiles(response.data);
     } catch (error) {
       console.error('Error fetching profiles:', error);
@@ -32,7 +31,7 @@ const TaskManager = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/tasks`); // Using API_BASE_URL
+      const response = await axios.get(`${API_BASE_URL}/api/tasks`);
       setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
@@ -46,7 +45,7 @@ const TaskManager = () => {
 
   const handleAddTask = async () => {
     try {
-      await axios.post(`${API_BASE_URL}/tasks`, newTask); // Using API_BASE_URL
+      await axios.post(`${API_BASE_URL}/api/tasks`, newTask);
       fetchTasks();
       setNewTask({
         profileId: '',
@@ -62,7 +61,7 @@ const TaskManager = () => {
 
   const handleUpdateTaskStatus = async (taskId, newStatus) => {
     try {
-      await axios.put(`${API_BASE_URL}/tasks/${taskId}`, { status: newStatus }); // Using API_BASE_URL
+      await axios.put(`${API_BASE_URL}/api/tasks/${taskId}`, { status: newStatus });
       fetchTasks();
     } catch (error) {
       console.error('Error updating task status:', error);
@@ -71,7 +70,7 @@ const TaskManager = () => {
 
   const handleRemoveTask = async (taskId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/tasks/${taskId}`); // Using API_BASE_URL
+      await axios.delete(`${API_BASE_URL}/api/tasks/${taskId}`);
       fetchTasks();
     } catch (error) {
       console.error('Error removing task:', error);
@@ -141,7 +140,6 @@ const TaskManager = () => {
           </form>
         </div>
 
-        {/* Render the TaskList component */}
         <TaskList
           tasks={tasks}
           handleUpdateTaskStatus={handleUpdateTaskStatus}

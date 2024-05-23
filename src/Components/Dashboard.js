@@ -19,8 +19,8 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
-      const tasksResponse = await axios.get(`${API_BASE_URL}/tasks`);
-      const overdueResponse = await axios.get(`${API_BASE_URL}/tasks/overdue`);
+      const tasksResponse = await axios.get(`${API_BASE_URL}/api/tasks`);
+      const overdueResponse = await axios.get(`${API_BASE_URL}/api/tasks/overdue`);
 
       const taskData = tasksResponse.data;
       const overdueData = overdueResponse.data;

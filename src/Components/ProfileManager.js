@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProfileList from './ProfileList'; // Import the ProfileList component
 import { API_BASE_URL } from '../utils/constant';
+
 const ProfileManager = () => {
   const [profiles, setProfiles] = useState([]);
   const [newProfile, setNewProfile] = useState({ name: '', role: '' });
@@ -14,56 +15,46 @@ const ProfileManager = () => {
 
   const fetchProfiles = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/profiles`);
+      const response = await axios.get(`${API_BASE_URL}/api/profiles`);
       setProfiles(response.data);
     } catch (error) {
       console.error('Error fetching profiles:', error);
     }
   };
 
-  
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProfile({ ...newProfile, [name]: value });
   };
 
-// Function to handle adding a profile with authorization
-const handleAddProfile = async () => {
-  if (!newProfile.name.trim() || !newProfile.role.trim()) {
-    showNotification('Name and role fields cannot be empty', 'error');
-    return;
-  }
-
-  try {
-    // Obtain token from localStorage
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      // Handle case when token is not available
-      // You might redirect user to login page or handle it based on your app's logic
-      console.error('Access token not found in localStorage');
+  const handleAddProfile = async () => {
+    if (!newProfile.name.trim() || !newProfile.role.trim()) {
+      showNotification('Name and role fields cannot be empty', 'error');
       return;
     }
 
-    // Include token in request headers
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('Access token not found in localStorage');
+        return;
       }
-    };
 
-    // Make API request with authorization headers
-    await axios.post(`${API_BASE_URL}/profiles`, newProfile, config);
-    setNewProfile({ name: '', role: '' });
-    fetchProfiles();
-    showNotification('Profile added successfully', 'success');
-  } catch (error) {
-    console.error('Error adding profile:', error);
-    showNotification('Failed to add profile', 'error');
-  }
-};
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
 
+      await axios.post(`${API_BASE_URL}/api/profiles`, newProfile, config);
+      setNewProfile({ name: '', role: '' });
+      fetchProfiles();
+      showNotification('Profile added successfully', 'success');
+    } catch (error) {
+      console.error('Error adding profile:', error);
+      showNotification('Failed to add profile', 'error');
+    }
+  };
 
   const handleEditProfile = (profileId) => {
     const profileToEdit = profiles.find(profile => profile.id === profileId);
@@ -73,7 +64,7 @@ const handleAddProfile = async () => {
 
   const handleUpdateProfile = async () => {
     try {
-      await axios.put(`${API_BASE_URL}/profiles/${editingProfile.id}`, newProfile);
+      await axios.put(`${API_BASE_URL}/api/profiles/${editingProfile.id}`, newProfile);
       fetchProfiles();
       setNewProfile({ name: '', role: '' });
       setEditingProfile(null);
@@ -86,7 +77,7 @@ const handleAddProfile = async () => {
 
   const handleRemoveProfile = async (profileId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/profiles/${profileId}`);
+      await axios.delete(`${API_BASE_URL}/api/profiles/${profileId}`);
       fetchProfiles();
       showNotification('Profile removed successfully', 'success');
     } catch (error) {
@@ -107,7 +98,6 @@ const handleAddProfile = async () => {
       <div className="task-manager-container max-w-6xl mx-auto">
         <h1 className="text-2xl font-semibold mb-4 text-left">Profile Manager</h1>
 
-        {/* Notification */}
         {notification && (
           <div
             className={`text-white px-4 py-2 rounded ${
@@ -118,7 +108,6 @@ const handleAddProfile = async () => {
           </div>
         )}
 
-        {/* Add/Edit Profile Form */}
         <div className="mb-8 bg-white rounded-lg p-6">
           <h2 className="text-lg font-bold mb-2">Add/Edit Profile</h2>
           <form className="flex flex-col space-y-4">
@@ -158,7 +147,6 @@ const handleAddProfile = async () => {
           </form>
         </div>
 
-        {/* Profiles List */}
         <div className="overflow-hidden">
           <ProfileList 
             profiles={profiles} 

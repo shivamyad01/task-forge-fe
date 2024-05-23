@@ -44,7 +44,7 @@ const Register = () => {
   const handleRegister = () => {
     if (!validateForm()) return;
 
-    axios.post(`${API_BASE_URL}/register`, { name, email, password })
+    axios.post(`${API_BASE_URL}/api/users/register`, { name, email, password })
       .then(response => {
         if (response.data.registered) {
           toast.success('Registration successful');
