@@ -10,7 +10,6 @@ const Login = ({ setLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  
 
   const validateForm = () => {
     // Basic email validation
@@ -37,10 +36,10 @@ const Login = ({ setLoggedIn }) => {
         password,
       });
 
-      if (response) {
+      if (response.status === 200) {
         const token = response.data.token;
         localStorage.setItem('token', token); // Store token in localStorage
-       
+
         setLoggedIn(true);
         navigate('/dashboard');
         toast.success('Login successful');
@@ -49,7 +48,11 @@ const Login = ({ setLoggedIn }) => {
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      toast.error('Error logging in. Please try again.');
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Error logging in. Please try again.');
+      }
     }
   };
 
@@ -67,7 +70,7 @@ const Login = ({ setLoggedIn }) => {
                 placeholder="Email Address"
                 id="email"
                 type="email"
-                className="bg-[#E5EAFF] mb-2 font-semibold text-[#C6C3C3]m-auto p-3 w-[20vw] border rounded-md"
+                className="bg-[#E5EAFF] mb-2 font-semibold text-[#C6C3C3] m-auto p-3 w-[20vw] border rounded-md"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -93,7 +96,7 @@ const Login = ({ setLoggedIn }) => {
               <button
                 type="button"
                 onClick={handleLogin}
-                className="mt-4 bg-[#FF9900] font-bold  p-3 w-full rounded-[50px] hover:bg-blue-500 text-black"
+                className="mt-4 bg-[#FF9900] font-bold p-3 w-full rounded-[50px] hover:bg-blue-500 text-black"
               >
                 LOGIN
               </button>
@@ -103,9 +106,9 @@ const Login = ({ setLoggedIn }) => {
                 <div className="mt-3 bg-[#C6C3C3] w-[120px] h-[2px]"></div>
               </div>
               <div className="flex item-center justify-center ">
-                <i className=" text-blue-600 cursor-pointer ri-facebook-circle-fill text-[2vw]"></i>
-                <i className=" text-red-500 cursor-pointer pl-2 pr-2 ri-google-fill text-[2vw]"></i>
-                <i className=" cursor-pointer ri-twitter-x-line pt-1 text-[1.8vw]"></i>
+                <i className="text-blue-600 cursor-pointer ri-facebook-circle-fill text-[2vw]"></i>
+                <i className="text-red-500 cursor-pointer pl-2 pr-2 ri-google-fill text-[2vw]"></i>
+                <i className="cursor-pointer ri-twitter-x-line pt-1 text-[1.8vw]"></i>
               </div>
             </div>
           </form>
