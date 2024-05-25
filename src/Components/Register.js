@@ -62,12 +62,12 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#E5EAFF]">
-      <div className='flex justify-center flex-col items-center min-h-screen w-[20vw] bg-[#8DE1D7]'>
-        <h1 className='text-[2vw] font-semibold text-black'>
+    <div className="min-h-screen flex bg-gradient-to-r from-[#8DE1D7] to-[#BFA9F5]">
+      <div className='flex justify-center flex-col items-center min-h-screen w-[20vw] bg-[#BFA9F5]'>
+        <h1 className='text-2xl font-semibold text-black'>
           Already Here?
         </h1>
-        <h2 className='text-center text-[#7E7E7E]'>
+        <h2 className='text-center text-gray-700'>
           Login and discover a great amount of new opportunities
         </h2>
         <button
@@ -79,87 +79,71 @@ const Register = () => {
         </button>
       </div>
 
-      <div className='flex w-[80vw] flex-col gap-10 items-center justify-center'>
-
-
-        <div>
-          <img src={logo} alt="Logo" />
-        </div>
+      <div className='flex justify-center items-center flex-1'>
         <div className="w-[28vw] h-[70vh] flex items-center pt-10 flex-col space-y-8 bg-white rounded-[15px] shadow-lg">
-          <h2 className="text-3xl text-center text-black-900 font-semibold">Register Here</h2>
-          <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
+          <img src={logo} alt="Logo" className="w-24 mb-8" />
+          <h2 className="text-3xl text-center text-black font-semibold">Register Here</h2>
+          <form className="mt-4 space-y-4">
             <div>
-
-              <div>
-                <input
-                  placeholder='Name'
-                  id="name"
-                  type="text"
-                  className="bg-[#E5EAFF] mb-2 font-semibold text-[#C6C3C3] m-auto p-3 w-[20vw] border rounded-md"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div>
-                <input
-                  placeholder='Email Address'
-                  id="email"
-                  type="email"
-                  className="bg-[#E5EAFF] mb-1 font-semibold text-[#C6C3C3] m-auto p-3 w-[20vw] border rounded-md"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <input
-                  placeholder='Password'
-                  id="password"
-                  type="password"
-                  className="bg-[#E5EAFF] font-semibold text-[#C6C3C3] mb-1 mt-1 p-3 w-[20vw] border rounded-md"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <div>
-                <input
-                  placeholder='Confirm Password'
-                  id="confirmPassword"
-                  type="password"
-                  className="bg-[#E5EAFF] font-semibold text-[#C6C3C3] mb-0 mt-1 p-3 w-[20vw] border rounded-md"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-
+              <input
+                placeholder='Name'
+                id="name"
+                type="text"
+                className="input-field"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
             <div>
-              <button
-                type="button"
-                onClick={handleRegister}
-                className="mt-1 bg-[#FF9900] font-bold p-3 w-full rounded-[50px] hover:bg-blue-500 text-black"
-              >
-                Sign Up
-              </button>
-              <div className='flex item-center justify-center mt-0 '>
-                <div className='mt-3 bg-[#C6C3C3] w-[120px] h-[2px]'>
-
-                </div>
-                <div className='pl-2 pr-2 text-[#C6C3C3] font-bold'>Or</div>
-                <div className='mt-3 bg-[#C6C3C3] w-[120px] h-[2px]'>
-
-                </div>
-              </div>
-              <div className=' flex item-center justify-center  '>
-                <i className="text-blue-600 cursor-pointer ri-facebook-circle-fill text-[2vw]"></i>
-                <i className="text-red-500 cursor-pointer pl-2 pr-2 ri-google-fill text-[2vw]"></i>
-                <i className="cursor-pointer ri-twitter-x-line pt-1 text-[1.8vw]"></i>
-              </div>
+              <input
+                placeholder='Email Address'
+                id="email"
+                type="email"
+                className="input-field"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
+            <div>
+              <input
+                placeholder='Password'
+                id="password"
+                type="password"
+                className="input-field"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div>
+              <input
+                placeholder='Confirm Password'
+                id="confirmPassword"
+                type="password"
+                className="input-field"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+            <button
+              type="button"
+              onClick={handleRegister}
+              className="button-primary"
+            >
+              Sign Up
+            </button>
           </form>
+          <div className='flex item-center justify-center'>
+            <div className='mt-3 bg-gray-400 w-[120px] h-[2px]'></div>
+            <div className='px-2 text-gray-400 font-bold'>Or</div>
+            <div className='mt-3 bg-gray-400 w-[120px] h-[2px]'></div>
+          </div>
+          <div className='flex item-center justify-center'>
+            <i className="text-blue-600 cursor-pointer ri-facebook-circle-fill text-3xl"></i>
+            <i className="text-red-500 cursor-pointer px-2 ri-google-fill text-3xl"></i>
+            <i className="cursor-pointer ri-twitter-x-line pt-1 text-2xl"></i>
+          </div>
         </div>
       </div>
-
     </div>
   );
 };

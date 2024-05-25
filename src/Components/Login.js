@@ -9,18 +9,21 @@ import toast from 'react-hot-toast';
 const Login = ({ setLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const validateForm = () => {
     // Basic email validation
     if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) {
-      toast.error('Please enter a valid email address');
+      setError('Please enter a valid email address');
       return false;
     }
 
     // Basic password validation
     if (!password.trim()) {
-      toast.error('Please enter your password');
+      setError('Please enter your password');
       return false;
     }
 
@@ -28,8 +31,10 @@ const Login = ({ setLoggedIn }) => {
   };
 
   const handleLogin = async () => {
+    setError('');
     if (!validateForm()) return;
 
+    setLoading(true);
     try {
       const response = await axios.post(`${API_BASE_URL}/api/users/login`, {
         email,
@@ -44,85 +49,84 @@ const Login = ({ setLoggedIn }) => {
         navigate('/dashboard');
         toast.success('Login successful');
       } else {
-        toast.error('Incorrect email or password');
+        setError('Incorrect email or password');
       }
     } catch (error) {
       console.error('Error logging in:', error);
       if (error.response && error.response.data && error.response.data.message) {
-        toast.error(error.response.data.message);
+        setError(error.response.data.message);
       } else {
-        toast.error('Error logging in. Please try again.');
+        setError('Error logging in. Please try again.');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex bg-[#E5EAFF]">
-      <div className="flex w-[80vw] flex-col gap-10 items-center justify-center">
-        <div>
-          <img src={logo} alt="" />
-        </div>
-        <div className="w-[28vw] h-[70vh] flex items-center pt-10 flex-col space-y-8 bg-white rounded-[15px] shadow-lg">
-          <h2 className="text-3xl text-center text-black-900 font-semibold">Login Here</h2>
-          <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
-            <div>
-              <input
-                placeholder="Email Address"
-                id="email"
-                type="email"
-                className="bg-[#E5EAFF] mb-2 font-semibold text-[#C6C3C3] m-auto p-3 w-[20vw] border rounded-md"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <input
-                placeholder="Password"
-                id="password"
-                type="password"
-                className="bg-[#E5EAFF] font-semibold text-[#C6C3C3] mt-1 p-3 w-full border rounded-md"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="flex w-full justify-between p-2">
-              <h2 className="text-[#C6C3C3] text-[13px] flex cursor-pointer font-medium">
-                <input className="mr-1" type="checkbox"></input>
-                Remember me
-              </h2>
-              <h2 className="text-[#C6C3C3] text-[13px] cursor-pointer font-medium"> Forgot Password?</h2>
-            </div>
-            <div>
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-r from-[#BFA9F5] to-[#F5B3F3]">
+      <div className="flex-1 flex justify-center items-center">
+        <div className="w-full md:w-[40vw] lg:w-[30vw] xl:w-[25vw] rounded-lg overflow-hidden shadow-lg bg-white">
+          <img src={logo} alt="Logo" className="mx-auto mt-8" />
+          <div className="p-8">
+            <h2 className="text-3xl text-center text-black font-semibold mb-8">Login Here</h2>
+            {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+              <div>
+                <input
+                  placeholder="Email Address"
+                  id="email"
+                  type="email"
+                  className="input-field"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <div className="relative">
+                  <input
+                    placeholder="Password"
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    className="input-field"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <i
+                    className={`absolute right-3 top-3 cursor-pointer transition-colors ${
+                      showPassword ? 'text-primary' : 'text-gray-500'
+                    }`}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <i className="ri-eye-fill"></i>
+                    ) : (
+                      <i className="ri-eye-off-fill"></i>
+                    )}
+                  </i>
+                </div>
+              </div>
               <button
                 type="button"
                 onClick={handleLogin}
-                className="mt-4 bg-[#FF9900] font-bold p-3 w-full rounded-[50px] hover:bg-blue-500 text-black"
+                className="button-primary w-full mt-6"
+                disabled={loading}
               >
-                LOGIN
+                {loading ? 'Logging in...' : 'LOGIN'}
               </button>
-              <div className="flex item-center justify-center mt-0 ">
-                <div className="mt-3 bg-[#C6C3C3] w-[120px] h-[2px]"></div>
-                <div className="pl-2 pr-2 text-[#C6C3C3] font-bold">Or</div>
-                <div className="mt-3 bg-[#C6C3C3] w-[120px] h-[2px]"></div>
-              </div>
-              <div className="flex item-center justify-center ">
-                <i className="text-blue-600 cursor-pointer ri-facebook-circle-fill text-[2vw]"></i>
-                <i className="text-red-500 cursor-pointer pl-2 pr-2 ri-google-fill text-[2vw]"></i>
-                <i className="cursor-pointer ri-twitter-x-line pt-1 text-[1.8vw]"></i>
-              </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
-      <div className="flex justify-center flex-col items-center min-h-screen w-[20vw] bg-[#8DE1D7]">
-        <h1 className="text-[2vw] font-semibold text-black">New Here?</h1>
-        <h2 className="text-center text-[#7E7E7E]">
+      <div className="flex-1 flex flex-col justify-center items-center bg-gradient-to-r from-[#F5B3F3] to-[#BFA9F5]">
+        <h1 className="text-2xl font-semibold text-black mb-4">New Here?</h1>
+        <h2 className="text-center text-gray-700 mb-8">
           Sign up and discover a great amount of new opportunities!
         </h2>
         <button
           type="button"
           onClick={() => navigate("/register")}
-          className="mt-10 bg-white font-bold p-3 w-[12vw] rounded-[50px] hover:bg-blue-500 text-black"
+          className="button-secondary"
         >
           Sign Up
         </button>
