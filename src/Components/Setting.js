@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 
 const Setting = () => {
-  const [theme, setTheme] = useState('light');
+  // const [theme, setTheme] = useState('light');
   const [language, setLanguage] = useState('english');
   const [notificationPreferences, setNotificationPreferences] = useState({
     email: true,
     browser: true
   });
 
-  const handleThemeChange = (e) => {
-    setTheme(e.target.value);
-    // Apply theme change
-  };
+  // const handleThemeChange = (e) => {
+  //   setTheme(e.target.value);
+  //   // Apply theme change
+  // };
 
   const handleLanguageChange = (e) => {
     setLanguage(e.target.value);
