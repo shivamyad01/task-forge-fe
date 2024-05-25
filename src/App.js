@@ -1,84 +1,65 @@
+// App.js
+
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import axios from "axios";
+
 import MiniDrawer from "./Components/MiniDrawer";
 import Dashboard from "./Components/Dashboard";
 import ProfileManager from "./Components/ProfileManager";
 import TaskManager from "./Components/TaskManager";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
+import Setting from "./Components/Setting";
 import Help from "./Components/Help";
 import Settings from "./Components/Setting"; // Import Settings component
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import { API_BASE_URL } from "./utils/constant";
 
-const lightTheme = createTheme({
-  palette: {
-    mode: 'light',
-  },
-});
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#64B5F6', // Change primary color to a shade of blue
-    },
-    background: {
-      default: '#121212', // Change default background color to a darker shade
-      paper: '#1E1E1E', // Change paper background color to a slightly lighter shade
-    },
-    text: {
-      primary: '#0062ff', // Change primary text color to white
-      secondary: '#CCCCCC', // Change secondary text color to a light gray
-    },
-    // You can define more colors as needed
-  },
-});
 
 const App = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const [mode, setMode] = useState(() => {
-    // Check if mode is stored in local storage
-    const savedMode = localStorage.getItem('mode');
-    return savedMode ? savedMode : 'light'; // Default to light mode if not found
-  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Update local storage when mode changes
-    localStorage.setItem('mode', mode);
-  }, [mode]);
-
-  const toggleMode = () => {
-    setMode(mode === 'light' ? 'dark' : 'light');
-  };
-
-  const theme = mode === 'light' ? lightTheme : darkTheme;
-
-  const ProtectedRoute = ({ element, ...rest }) => {
-    return isLoggedIn ? (
-      <Route {...rest} element={element} />
-    ) : (
-      <Navigate to="/login" />
-    );
-  };
+    // Check if the user is logged in by calling a backend route
+    axios
+      .get(`${API_BASE_URL}/api/users/login`)
+      .then((response) => {
+        if (response.data.loggedIn) {
+          setLoggedIn(true);
+        }
+        setLoading(false); // Set loading to false after request completes
+      })
+      .catch((error) => {
+        console.error("Error checking login status:", error);
+        setLoading(false); // Set loading to false if there's an error
+      });
+  }, []); // Empty dependency array to run the effect only once
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<MiniDrawer toggleMode={toggleMode} mode={mode} />}>
-            <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
-            <Route path="/profile" element={<ProtectedRoute element={<ProfileManager />} />} />
-            <Route path="/task" element={<ProtectedRoute element={<TaskManager />} />} />
-            <Route path="/help" element={<ProtectedRoute element={<Help />} />} />
-            <Route path="/setting" element={<ProtectedRoute element={<Settings toggleMode={toggleMode} />} />} />
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
+        <Route path="/register" element={<Register />} />
+
+        {isLoggedIn ? (
+          <Route path="/" element={<MiniDrawer />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<ProfileManager />} />
+            <Route path="/task" element={<TaskManager />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/setting" element={<Setting />} />
+            <Route path="/settings" element={<Settings />} /> {/* Include Settings component route */}
+            {/* Add more routes as needed */}
           </Route>
-        </Routes>
-      </Router>
-    </ThemeProvider>
+        ) : (
+          <Route path="*" element={<Navigate to="/login" />} />
+        )}
+      </Routes>
+    </Router>
   );
 };
 
