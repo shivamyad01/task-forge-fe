@@ -62,8 +62,9 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-r from-[#8DE1D7] to-[#BFA9F5]">
-      <div className='flex justify-center flex-col items-center min-h-screen w-[20vw] bg-[#BFA9F5]'>
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gradient-to-r from-[#8DE1D7] to-[#BFA9F5]">
+      {/* Left Column */}
+      <div className='flex justify-center flex-col items-center min-h-screen w-full lg:w-[50%] bg-[#BFA9F5]'>
         <h1 className='text-2xl font-semibold text-black'>
           Already Here?
         </h1>
@@ -73,14 +74,15 @@ const Register = () => {
         <button
           type="button"
           onClick={() => navigate("/login")}
-          className="mt-10 bg-white font-bold p-3 w-[12vw] rounded-[50px] hover:bg-blue-500 text-black"
+          className="mt-10 bg-white font-bold p-3 w-[12vw] lg:w-[24vw] rounded-[50px] hover:bg-blue-500 text-black"
         >
           Login in
         </button>
       </div>
 
+      {/* Right Column */}
       <div className='flex justify-center items-center flex-1'>
-        <div className="w-[28vw] h-[70vh] flex items-center pt-10 flex-col space-y-8 bg-white rounded-[15px] shadow-lg">
+        <div className="w-full lg:w-[50%] h-[70vh] flex items-center pt-10 flex-col space-y-8 bg-white rounded-[15px] shadow-lg">
           <img src={logo} alt="Logo" className="w-24 mb-8" />
           <h2 className="text-3xl text-center text-black font-semibold">Register Here</h2>
           <form className="mt-4 space-y-4">
