@@ -46,7 +46,7 @@ const Register = () => {
 
     axios.post(`${API_BASE_URL}/api/users/register`, { name, email, password })
       .then(response => {
-        if (response.data.registered) {
+        if (response) {
           toast.success('Registration successful');
           navigate('/login');
         } else if (response.data.alreadyExists) {

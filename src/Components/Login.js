@@ -37,7 +37,7 @@ const Login = ({ setLoggedIn }) => {
         password,
       });
 
-      if (response.data.loggedIn) {
+      if (response) {
         const token = response.data.token;
         localStorage.setItem('token', token); // Store token in localStorage
        
