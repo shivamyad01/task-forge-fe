@@ -1,5 +1,5 @@
 #Live Url
-https://deploy-fe--taskforgedeploy.netlify.app/login
+https://deploy-fe--taskforgedeploy.netlify.app
 
 # Getting Started with Create React App
 
