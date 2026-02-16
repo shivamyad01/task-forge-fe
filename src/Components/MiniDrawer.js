@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link as RouterLink, Routes, Route } from "react-router-dom";
+import { Link as RouterLink, Outlet } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -21,12 +21,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TaskIcon from "@mui/icons-material/Task";
-import Dashboard from "./Dashboard";
-import ProfileManager from "./ProfileManager";
-import TaskManager from "./TaskManager";
 import AccountMenu from "./AccountMenu";
-import Setting from "./Setting";
-import Help from "./Help";
 import HelpCenterIcon from "@mui/icons-material/HelpCenter";
 import logo from "../Components/assets/logo.png"
 
@@ -218,13 +213,7 @@ export default function MiniDrawer({  mode, toggleMode }) {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         {/* Adjusted paddingTop to accommodate AppBar */}
         <DrawerHeader />
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<ProfileManager />} />
-          <Route path="/task" element={<TaskManager />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/setting" element={<Setting />} />
-        </Routes>
+        <Outlet />
       </Box>
     </Box>
   );

@@ -1,8 +1,7 @@
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../utils/constant";
+import { getTasks, getOverdueTasks } from "../api/taskService";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -19,11 +18,8 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
-      const tasksResponse = await axios.get(`${API_BASE_URL}/api/tasks`);
-      const overdueResponse = await axios.get(`${API_BASE_URL}/api/tasks/overdue`);
-
-      const taskData = tasksResponse.data;
-      const overdueData = overdueResponse.data;
+      const taskData = await getTasks();
+      const overdueData = await getOverdueTasks();
 
       const completed = taskData.filter((task) => task.status === "completed").length;
       // const pending = taskData.filter((task) => task.status === "pending").length;

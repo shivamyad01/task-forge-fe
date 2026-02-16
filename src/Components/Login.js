@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import 'remixicon/fonts/remixicon.css';
 import logo from '../Components/assets/logo.png';
-import { API_BASE_URL } from '../utils/constant';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
+import { login as loginApi } from '../api/authService';
 
-const Login = ({ setLoggedIn }) => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const validateForm = () => {
     // Basic email validation
@@ -31,16 +32,9 @@ const Login = ({ setLoggedIn }) => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/users/login`, {
-        email,
-        password,
-      });
-
-      if (response.status === 200) {
-        const token = response.data.token;
-        localStorage.setItem('token', token); // Store token in localStorage
-
-        setLoggedIn(true);
+      const data = await loginApi(email, password);
+      if (data?.token) {
+        login(data.token);
         navigate('/dashboard');
         toast.success('Login successful');
       } else {

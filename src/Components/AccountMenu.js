@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import PersonIcon from "@mui/icons-material/Person";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import toast from 'react-hot-toast';
@@ -20,6 +21,7 @@ export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -30,8 +32,7 @@ export default function AccountMenu() {
   };
 
   const handleLogout = () => {
-    // Perform logout logic
-    // For simplicity, just navigate to the login page
+    logout();
     navigate("/login");
     toast.success('Successfully logged out');
   };

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import 'remixicon/fonts/remixicon.css';
 import logo from '../Components/assets/logo.png';
 import toast from 'react-hot-toast';
-import { API_BASE_URL } from '../utils/constant';
+import { register as registerApi } from '../api/authService';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -41,24 +40,20 @@ const Register = () => {
     return true;
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!validateForm()) return;
-
-    axios.post(`${API_BASE_URL}/api/users/register`, { name, email, password })
-      .then(response => {
-        if (response) {
-          toast.success('Registration successful');
-          navigate('/login');
-        } else if (response.data.alreadyExists) {
-          toast.error('User with this email already exists');
-        } else {
-          toast.error('Registration failed');
-        }
-      })
-      .catch(error => {
-        console.error('Error registering user:', error);
+    try {
+      const response = await registerApi(name, email, password);
+      if (response) {
+        toast.success('Registration successful');
+        navigate('/login');
+      } else {
         toast.error('Registration failed');
-      });
+      }
+    } catch (error) {
+      console.error('Error registering user:', error);
+      toast.error('Registration failed');
+    }
   };
 
   return (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import TaskList from './TaskList'; // Import the TaskList component
-import { API_BASE_URL } from '../utils/constant';
+import { getProfiles } from '../api/profileService';
+import { getTasks, addTask, updateTaskStatus as updateTaskStatusApi, removeTask as removeTaskApi } from '../api/taskService';
 
 const TaskManager = () => {
   const [profiles, setProfiles] = useState([]);
@@ -22,8 +22,8 @@ const TaskManager = () => {
 
   const fetchProfiles = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/profiles`);
-      setProfiles(response.data);
+      const data = await getProfiles();
+      setProfiles(data);
     } catch (error) {
       console.error('Error fetching profiles:', error);
     }
@@ -31,8 +31,8 @@ const TaskManager = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/tasks`);
-      setTasks(response.data);
+      const data = await getTasks();
+      setTasks(data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
     }
@@ -45,7 +45,7 @@ const TaskManager = () => {
 
   const handleAddTask = async () => {
     try {
-      await axios.post(`${API_BASE_URL}/api/tasks`, newTask);
+      await addTask(newTask);
       fetchTasks();
       setNewTask({
         profileId: '',
@@ -61,7 +61,7 @@ const TaskManager = () => {
 
   const handleUpdateTaskStatus = async (taskId, newStatus) => {
     try {
-      await axios.put(`${API_BASE_URL}/api/tasks/${taskId}`, { status: newStatus });
+      await updateTaskStatusApi(taskId, newStatus);
       fetchTasks();
     } catch (error) {
       console.error('Error updating task status:', error);
@@ -70,7 +70,7 @@ const TaskManager = () => {
 
   const handleRemoveTask = async (taskId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/tasks/${taskId}`);
+      await removeTaskApi(taskId);
       fetchTasks();
     } catch (error) {
       console.error('Error removing task:', error);

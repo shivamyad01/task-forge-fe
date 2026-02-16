@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import ProfileList from './ProfileList'; // Import the ProfileList component
-import { API_BASE_URL } from '../utils/constant';
+import { getProfiles, addProfile, updateProfile, removeProfile } from '../api/profileService';
 
 const ProfileManager = () => {
   const [profiles, setProfiles] = useState([]);
@@ -15,8 +14,8 @@ const ProfileManager = () => {
 
   const fetchProfiles = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/profiles`);
-      setProfiles(response.data);
+      const data = await getProfiles();
+      setProfiles(data);
     } catch (error) {
       console.error('Error fetching profiles:', error);
     }
@@ -34,19 +33,7 @@ const ProfileManager = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('Access token not found in localStorage');
-        return;
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      };
-
-      await axios.post(`${API_BASE_URL}/api/profiles`, newProfile, config);
+      await addProfile(newProfile);
       setNewProfile({ name: '', role: '' });
       fetchProfiles();
       showNotification('Profile added successfully', 'success');
@@ -64,7 +51,7 @@ const ProfileManager = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      await axios.put(`${API_BASE_URL}/api/profiles/${editingProfile.id}`, newProfile);
+      await updateProfile(editingProfile.id, newProfile);
       fetchProfiles();
       setNewProfile({ name: '', role: '' });
       setEditingProfile(null);
@@ -77,7 +64,7 @@ const ProfileManager = () => {
 
   const handleRemoveProfile = async (profileId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/profiles/${profileId}`);
+      await removeProfile(profileId);
       fetchProfiles();
       showNotification('Profile removed successfully', 'success');
     } catch (error) {
