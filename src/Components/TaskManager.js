@@ -82,10 +82,10 @@ const TaskManager = () => {
       <div className="task-manager-container max-w-6xl mx-auto">
         <h1 className="text-2xl font-semibold mb-4 text-left">Task Manager</h1>
 
-        <div className="mb-8 bg-white rounded-lg p-6">
+        <div className="mb-8 bg-white rounded-lg p-4 sm:p-6">
           <h2 className="text-lg font-bold mb-4">Add Task</h2>
-          <form className="grid grid-cols-2 gap-4">
-            <div>
+          <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-1">
               <label className="block text-sm font-semibold mb-1">Profile:</label>
               <select
                 className="border rounded p-2 w-full"
@@ -99,7 +99,7 @@ const TaskManager = () => {
                 ))}
               </select>
             </div>
-            <div>
+            <div className="md:col-span-1">
               <label className="block text-sm font-semibold mb-1">Task Name:</label>
               <input
                 className="border rounded p-2 w-full"
@@ -109,7 +109,7 @@ const TaskManager = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-span-2">
+            <div className="md:col-span-2">
               <label className="block text-sm font-semibold mb-1">Description:</label>
               <textarea
                 className="border rounded p-2 w-full h-24 resize-none"
@@ -118,7 +118,7 @@ const TaskManager = () => {
                 onChange={handleInputChange}
               ></textarea>
             </div>
-            <div>
+            <div className="md:col-span-1">
               <label className="block text-sm font-semibold mb-1">Deadline:</label>
               <input
                 className="border rounded p-2 w-full"
@@ -128,10 +128,10 @@ const TaskManager = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-span-2 flex justify-start">
+            <div className="md:col-span-2 flex justify-start mt-2">
               <button
                 type="button"
-                className="bg-orange-500 text-white px-7 py-2 rounded hover:bg-orange-600"
+                className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 text-sm sm:text-base"
                 onClick={handleAddTask}
               >
                 Add Task

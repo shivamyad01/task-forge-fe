@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link as RouterLink, Outlet } from "react-router-dom";
+import { Link as RouterLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -7,6 +7,9 @@ import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import Paper from "@mui/material/Paper";
 
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -28,6 +31,7 @@ import logo from "../Components/assets/logo.png"
 
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const drawerWidthOpen = 240; // Width of the drawer when it's open
 const drawerWidthClosed = 90; // Width of the drawer when it's closed
@@ -98,7 +102,12 @@ const Drawer = styled(MuiDrawer, {
 }));
 export default function MiniDrawer({  mode, toggleMode }) {
   const theme = useTheme();
-  const [open, setOpen] = useState(true); // Keep the drawer open by default
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [open, setOpen] = useState(!isMobile); // Closed on mobile, open on larger screens
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const currentPath = location.pathname.split("/")[1] || "dashboard";
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -111,20 +120,22 @@ export default function MiniDrawer({  mode, toggleMode }) {
   return (
     <Box sx={{ display: "flex" }}>
     <CssBaseline />
-    <AppBar position="fixed" open={open}>
+    <AppBar position="fixed" open={!isMobile && open}>
       <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-          sx={{
-            marginRight: 5,
-            ...(open && { display: "none" }),
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
+        {!isMobile && (
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              marginRight: 2,
+              ...(open && { display: "none" }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
         {/* Logo and title hidden when drawer is open */}
         {!open && (
           <>
@@ -132,89 +143,110 @@ export default function MiniDrawer({  mode, toggleMode }) {
          
           </>
         )}
-          
-          <div style={{ display: "flex", marginLeft: "auto" }}>
-  <List>
-    <ListItem button onClick={toggleMode}>
-      <ListItemIcon>
-        {mode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
-      </ListItemIcon>
-      <ListItemText primary={mode === 'light' ? 'Dark Mode' : 'Light Mode'} />
-    </ListItem>
-    {/* Add other list items for navigation here */}
-  </List>
-  <div className="mt-3" >
-    <AccountMenu />
-  </div>
-</div>
+        <Box sx={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 1 }}>
+          <IconButton
+            color="inherit"
+            aria-label="toggle theme"
+            onClick={toggleMode}
+            size="large"
+          >
+            {mode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
+          </IconButton>
+          <span className="hidden sm:inline text-sm">
+            {mode === 'light' ? 'Dark Mode' : 'Light Mode'}
+          </span>
+          <AccountMenu />
+        </Box>
 
       </Toolbar>
     </AppBar>
-    <Drawer variant="permanent" open={open}>
-      <DrawerHeader>
-        {/* Logo and title shown when drawer is closed */}
-        <img src={logo} alt="Logo" style={{  height: '40px' }} />
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === "rtl" ? (
-            <ChevronRightIcon />
-          ) : (
-            <ChevronLeftIcon />
-          )}
-        </IconButton>
-      
-      </DrawerHeader>
-  
-        <Divider />
-        <List>
-          <ListItem component={RouterLink} to="/dashboard">
-            <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem component={RouterLink} to="/profile">
-            <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Profile" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem component={RouterLink} to="/task">
-            <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
-              <ListItemIcon>
-                <TaskIcon />
-              </ListItemIcon>
-              <ListItemText primary="Task" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem component={RouterLink} to="/help">
-            <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
-              <ListItemIcon>
-                <HelpCenterIcon />
-              </ListItemIcon>
-              <ListItemText primary="Help" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem component={RouterLink} to="/setting">
-            <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Setting" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-        <Divider />
-        {/* Add additional items or footer items here */}
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+    {!isMobile && (
+      <Drawer
+        variant={"permanent"}
+        open={open}
+      >
+        <DrawerHeader>
+          {/* Logo and title shown when drawer is closed */}
+          <img src={logo} alt="Logo" style={{  height: '40px' }} />
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "rtl" ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
+          </IconButton>
+        
+        </DrawerHeader>
+
+          <Divider />
+          <List>
+            <ListItem component={RouterLink} to="/dashboard">
+              <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem component={RouterLink} to="/profile">
+              <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
+                <ListItemIcon>
+                  <AccountCircleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Profile" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem component={RouterLink} to="/task">
+              <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
+                <ListItemIcon>
+                  <TaskIcon />
+                </ListItemIcon>
+                <ListItemText primary="Task" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem component={RouterLink} to="/help">
+              <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
+                <ListItemIcon>
+                  <HelpCenterIcon />
+                </ListItemIcon>
+                <ListItemText primary="Help" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem component={RouterLink} to="/setting">
+              <ListItemButton sx={{ "&:hover": { backgroundColor: "orange" } }}>
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Setting" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+          <Divider />
+          {/* Add additional items or footer items here */}
+        </Drawer>
+      )}
+      <Box component="main" sx={{ flexGrow: 1, p: { xs: 2, sm: 3 }, pb: isMobile ? 9 : 3 }}>
         {/* Adjusted paddingTop to accommodate AppBar */}
         <DrawerHeader />
         <Outlet />
       </Box>
+      {isMobile && (
+        <Paper sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }} elevation={3}>
+          <BottomNavigation
+            value={currentPath}
+            onChange={(event, newValue) => {
+              navigate(`/${newValue}`);
+            }}
+            showLabels
+          >
+            <BottomNavigationAction label="Dashboard" value="dashboard" icon={<DashboardIcon />} />
+            <BottomNavigationAction label="Profile" value="profile" icon={<AccountCircleIcon />} />
+            <BottomNavigationAction label="Task" value="task" icon={<TaskIcon />} />
+            <BottomNavigationAction label="Help" value="help" icon={<HelpCenterIcon />} />
+            <BottomNavigationAction label="Setting" value="setting" icon={<SettingsIcon />} />
+          </BottomNavigation>
+        </Paper>
+      )}
     </Box>
   );
 }

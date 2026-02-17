@@ -13,148 +13,105 @@ const Register = () => {
   const navigate = useNavigate();
 
   const validateForm = () => {
-    // Basic name validation
     if (!name.trim()) {
       toast.error('Please enter your name');
       return false;
     }
-
-    // Basic email validation
     if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) {
       toast.error('Please enter a valid email address');
       return false;
     }
-
-    // Basic password validation
     if (!password.trim()) {
       toast.error('Please enter a password');
       return false;
     }
-
-    // Check if passwords match
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
       return false;
     }
-
     return true;
   };
 
   const handleRegister = async () => {
     if (!validateForm()) return;
     try {
-      const response = await registerApi(name, email, password);
-      if (response) {
+      const res = await registerApi(name, email, password);
+      if (res) {
         toast.success('Registration successful');
         navigate('/login');
       } else {
         toast.error('Registration failed');
       }
-    } catch (error) {
-      console.error('Error registering user:', error);
+    } catch (err) {
+      console.error(err);
       toast.error('Registration failed');
     }
   };
 
   return (
-    <div className="min-h-screen flex bg-[#E5EAFF]">
-      <div className='flex justify-center flex-col items-center min-h-screen w-[20vw] bg-[#8DE1D7]'>
-        <h1 className='text-[2vw] font-semibold text-black'>
-          Already Here?
-        </h1>
-        <h2 className='text-center text-[#7E7E7E]'>
-          Login and discover a great amount of new opportunities
-        </h2>
-        <button
-          type="button"
-          onClick={() => navigate("/login")}
-          className="mt-10 bg-white font-bold p-3 w-[12vw] rounded-[50px] hover:bg-blue-500 text-black"
-        >
-          Login in
-        </button>
+    <div className="min-h-screen flex flex-col md:flex-row bg-[#E9EEFF]">
+      <div className="w-full md:w-1/5 flex items-center justify-center bg-gradient-to-r from-[#86E6D9] to-[#8DE1D7] py-6 md:py-12">
+        <div className="text-center md:text-left px-4 md:px-8 w-full max-w-xs">
+          <img src={logo} alt="TaskForge" className="h-10 mx-auto md:mx-0 mb-3" />
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-black">Already Here?</h1>
+          <p className="mt-2 text-sm sm:text-base md:text-lg text-[#2F4F4A] max-w-xs mx-auto md:mx-0">Login and discover a great amount of new opportunities</p>
+          <div className="mt-5 md:mt-6 flex justify-center md:justify-start">
+            <button
+              onClick={() => navigate('/login')}
+              className="bg-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg hover:opacity-95 text-sm sm:text-base"
+            >
+              Login
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div className='flex w-[80vw] flex-col gap-10 items-center justify-center'>
-
-
-        <div>
-          <img src={logo} alt="Logo" />
-        </div>
-        <div className="w-[28vw] h-[70vh] flex items-center pt-10 flex-col space-y-8 bg-white rounded-[15px] shadow-lg">
-          <h2 className="text-3xl text-center text-black-900 font-semibold">Register Here</h2>
-          <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
-            <div>
-
-              <div>
-                <input
-                  placeholder='Name'
-                  id="name"
-                  type="text"
-                  className="bg-[#E5EAFF] mb-2 font-semibold text-[#C6C3C3] m-auto p-3 w-[20vw] border rounded-md"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div>
-                <input
-                  placeholder='Email Address'
-                  id="email"
-                  type="email"
-                  className="bg-[#E5EAFF] mb-1 font-semibold text-[#C6C3C3] m-auto p-3 w-[20vw] border rounded-md"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <input
-                  placeholder='Password'
-                  id="password"
-                  type="password"
-                  className="bg-[#E5EAFF] font-semibold text-[#C6C3C3] mb-1 mt-1 p-3 w-[20vw] border rounded-md"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <div>
-                <input
-                  placeholder='Confirm Password'
-                  id="confirmPassword"
-                  type="password"
-                  className="bg-[#E5EAFF] font-semibold text-[#C6C3C3] mb-0 mt-1 p-3 w-[20vw] border rounded-md"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-
-            </div>
+      <div className="flex-1 flex items-center justify-center p-6">
+        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 md:p-8">
+          <h2 className="text-xl sm:text-2xl md:text-3xl text-[#0B3B66] font-semibold text-center">Register Here</h2>
+          <form onSubmit={(e) => e.preventDefault()} className="mt-4 sm:mt-6 space-y-4">
+            <input
+              className="w-full p-4 sm:p-3 rounded-lg bg-[#F3F8FF] placeholder-gray-400 border border-transparent focus:ring-2 focus:ring-orange-300 text-base"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              className="w-full p-4 sm:p-3 rounded-lg bg-[#F3F8FF] placeholder-gray-400 border border-transparent focus:ring-2 focus:ring-orange-300 text-base"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              className="w-full p-4 sm:p-3 rounded-lg bg-[#F3F8FF] placeholder-gray-400 border border-transparent focus:ring-2 focus:ring-orange-300 text-base"
+              placeholder="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <input
+              className="w-full p-4 sm:p-3 rounded-lg bg-[#F3F8FF] placeholder-gray-400 border border-transparent focus:ring-2 focus:ring-orange-300 text-base"
+              placeholder="Confirm Password"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
             <div>
               <button
-                type="button"
                 onClick={handleRegister}
-                className="mt-1 bg-[#FF9900] font-bold p-3 w-full rounded-[50px] hover:bg-blue-500 text-black"
+                className="w-full py-3 rounded-full bg-gradient-to-r from-[#FF9900] to-[#FFB86B] font-bold shadow-md hover:opacity-95"
               >
                 Sign Up
               </button>
-              <div className='flex item-center justify-center mt-0 '>
-                <div className='mt-3 bg-[#C6C3C3] w-[120px] h-[2px]'>
-
-                </div>
-                <div className='pl-2 pr-2 text-[#C6C3C3] font-bold'>Or</div>
-                <div className='mt-3 bg-[#C6C3C3] w-[120px] h-[2px]'>
-
-                </div>
-              </div>
-              <div className=' flex item-center justify-center  '>
-                <i className="text-blue-600 cursor-pointer ri-facebook-circle-fill text-[2vw]"></i>
-                <i className="text-red-500 cursor-pointer pl-2 pr-2 ri-google-fill text-[2vw]"></i>
-                <i className="cursor-pointer ri-twitter-x-line pt-1 text-[1.8vw]"></i>
-              </div>
+            </div>
+            <div className="flex items-center justify-center gap-4 mt-4">
+              <button className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center"><i className="ri-facebook-circle-fill text-blue-600"></i></button>
+              <button className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center"><i className="ri-google-fill text-red-500"></i></button>
+              <button className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center"><i className="ri-twitter-x-line text-sky-600"></i></button>
             </div>
           </form>
         </div>
       </div>
-
     </div>
   );
 };

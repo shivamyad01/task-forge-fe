@@ -8,7 +8,7 @@ const ProfileList = ({ profiles, handleEditProfile, handleRemoveProfile }) => {
       
       <ul className="space-y-4 profiles-list overflow-y-auto max-h-80">
         {profiles.slice().reverse().map(profile => (
-          <li key={profile.id} className="flex items-center justify-between bg-white shadow-md rounded-lg p-4">
+          <li key={profile.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white shadow-md rounded-lg p-4 gap-3">
             <div className="flex items-center">
               <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center mr-4">
                 <span className="text-gray-600 text-lg font-semibold">{profile.name.charAt(0)}</span>
@@ -18,7 +18,7 @@ const ProfileList = ({ profiles, handleEditProfile, handleRemoveProfile }) => {
                 <p className="text-gray-600">{profile.role}</p>
               </div>
             </div>
-            <div className="space-x-2">
+            <div className="flex flex-wrap gap-2 sm:ml-auto">
               <button
                 className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
                 onClick={() => handleEditProfile(profile.id)}
