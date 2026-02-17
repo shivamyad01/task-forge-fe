@@ -42,8 +42,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-[#E9EEFF]">
-      <div className="w-full md:w-1/5 flex items-center justify-center bg-gradient-to-r from-[#8DE1D7] to-[#86E6D9] py-6 md:py-12">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
+      <div className="w-full md:w-1/5 flex items-center justify-center bg-white border-b md:border-b-0 md:border-r border-gray-200 py-6 md:py-12">
         <div className="text-center md:text-left px-4 md:px-8 w-full max-w-xs">
           <img src={logo} alt="TaskForge" className="h-10 mx-auto md:mx-0 mb-3" />
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-black">New Here?</h1>
@@ -59,8 +59,8 @@ const Login = () => {
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 md:p-8">
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
+        <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-6 md:p-8 border border-gray-100">
           <h2 className="text-xl sm:text-2xl md:text-3xl text-[#0B3B66] font-semibold text-center">Login Here</h2>
           <form onSubmit={(e) => e.preventDefault()} className="mt-4 sm:mt-6 space-y-4">
             <input
@@ -85,7 +85,7 @@ const Login = () => {
             <div>
               <button
                 onClick={handleLogin}
-                className="w-full py-4 sm:py-3 rounded-full bg-gradient-to-r from-[#FF9900] to-[#FFB86B] font-bold shadow-md hover:opacity-95 text-lg sm:text-base"
+                className="w-full py-4 sm:py-3 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-bold shadow-md transition-colors text-lg sm:text-base"
               >
                 LOGIN
               </button>

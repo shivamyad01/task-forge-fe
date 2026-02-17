@@ -13,7 +13,7 @@ import Paper from "@mui/material/Paper";
 
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
@@ -73,7 +73,7 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  backgroundColor: "gray", // Change the background color here
+  backgroundColor: "#111827", // neutral dark header
   ...(open && {
     marginLeft: drawerWidthOpen,
     width: `calc(100% - ${drawerWidthOpen}px)`,
@@ -118,22 +118,28 @@ export default function MiniDrawer({  mode, toggleMode }) {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", backgroundColor: "#f3f4f6" }}>
     <CssBaseline />
     <AppBar position="fixed" open={!isMobile && open}>
       <Toolbar>
         {!isMobile && (
           <IconButton
             color="inherit"
-            aria-label="open drawer"
+            aria-label="open navigation menu"
             onClick={handleDrawerOpen}
             edge="start"
             sx={{
               marginRight: 2,
+              borderRadius: "999px",
+              backgroundColor: "rgba(248, 250, 252, 0.12)",
+              border: "1px solid rgba(148, 163, 184, 0.5)",
+              "&:hover": {
+                backgroundColor: "rgba(248, 250, 252, 0.24)",
+              },
               ...(open && { display: "none" }),
             }}
           >
-            <MenuIcon />
+            <MenuRoundedIcon />
           </IconButton>
         )}
         {/* Logo and title hidden when drawer is open */}
@@ -231,19 +237,62 @@ export default function MiniDrawer({  mode, toggleMode }) {
         <Outlet />
       </Box>
       {isMobile && (
-        <Paper sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }} elevation={3}>
+        <Paper
+          sx={{
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+            overflow: "hidden",
+            boxShadow: "0 -4px 12px rgba(15,23,42,0.18)",
+          }}
+          elevation={0}
+        >
           <BottomNavigation
             value={currentPath}
             onChange={(event, newValue) => {
               navigate(`/${newValue}`);
             }}
             showLabels
+            sx={{
+              backgroundColor: "#ffffff",
+              "& .MuiBottomNavigationAction-root": {
+                minWidth: 0,
+                paddingTop: 6,
+                paddingBottom: 6,
+              },
+              "& .Mui-selected": {
+                color: "#f97316",
+              },
+            }}
           >
-            <BottomNavigationAction label="Dashboard" value="dashboard" icon={<DashboardIcon />} />
-            <BottomNavigationAction label="Profile" value="profile" icon={<AccountCircleIcon />} />
-            <BottomNavigationAction label="Task" value="task" icon={<TaskIcon />} />
-            <BottomNavigationAction label="Help" value="help" icon={<HelpCenterIcon />} />
-            <BottomNavigationAction label="Setting" value="setting" icon={<SettingsIcon />} />
+            <BottomNavigationAction
+              label="Dashboard"
+              value="dashboard"
+              icon={<DashboardIcon fontSize="small" />}
+            />
+            <BottomNavigationAction
+              label="Profile"
+              value="profile"
+              icon={<AccountCircleIcon fontSize="small" />}
+            />
+            <BottomNavigationAction
+              label="Task"
+              value="task"
+              icon={<TaskIcon fontSize="small" />}
+            />
+            <BottomNavigationAction
+              label="Help"
+              value="help"
+              icon={<HelpCenterIcon fontSize="small" />}
+            />
+            <BottomNavigationAction
+              label="Setting"
+              value="setting"
+              icon={<SettingsIcon fontSize="small" />}
+            />
           </BottomNavigation>
         </Paper>
       )}

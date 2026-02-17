@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import ProfileList from './ProfileList'; // Import the ProfileList component
+import ProfileList from './ProfileList';
 import { getProfiles, addProfile, updateProfile, removeProfile } from '../api/profileService';
+import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
 
 const ProfileManager = () => {
   const [profiles, setProfiles] = useState([]);
   const [newProfile, setNewProfile] = useState({ name: '', role: '' });
   const [editingProfile, setEditingProfile] = useState(null);
   const [notification, setNotification] = useState(null);
+  const totalProfiles = profiles.length;
 
   useEffect(() => {
     fetchProfiles();
@@ -81,9 +84,17 @@ const ProfileManager = () => {
   };
 
   return (
-    <div className="task-manager-wrapper p-4 bg-gray-100">
-      <div className="task-manager-container max-w-6xl mx-auto">
-        <h1 className="text-2xl font-semibold mb-4 text-left">Profile Manager</h1>
+    <div className="p-4 bg-gray-100 min-h-screen">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-4">
+          <div>
+            <h1 className="text-2xl font-semibold text-left text-slate-800">Profile Manager</h1>
+            <p className="text-xs text-slate-500 mt-1">Manage people and their roles for assigning tasks.</p>
+          </div>
+          <span className="inline-flex items-center self-start sm:self-auto px-3 py-1 text-xs rounded-full bg-slate-100 text-slate-700 font-medium">
+            Total profiles: {totalProfiles}
+          </span>
+        </div>
 
         {notification && (
           <div
@@ -95,11 +106,27 @@ const ProfileManager = () => {
           </div>
         )}
 
-        <div className="mb-8 bg-white rounded-lg p-6">
-          <h2 className="text-lg font-bold mb-2">Add/Edit Profile</h2>
+        <div className="mb-8 bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center text-orange-500">
+                <PersonAddAltRoundedIcon fontSize="small" />
+              </div>
+              <h2 className="text-lg font-bold">{editingProfile ? 'Edit Profile' : 'Add Profile'}</h2>
+            </div>
+            {editingProfile && (
+              <button
+                type="button"
+                className="text-xs text-gray-500 underline"
+                onClick={() => { setEditingProfile(null); setNewProfile({ name: '', role: '' }); }}
+              >
+                Cancel edit
+              </button>
+            )}
+          </div>
           <form className="flex flex-col space-y-4">
             <input
-              className="border rounded p-2"
+              className="border rounded p-2 text-sm"
               type="text"
               placeholder="Name"
               name="name"
@@ -107,7 +134,7 @@ const ProfileManager = () => {
               onChange={handleInputChange}
             />
             <input
-              className="border rounded p-2"
+              className="border rounded p-2 text-sm"
               type="text"
               placeholder="Role"
               name="role"

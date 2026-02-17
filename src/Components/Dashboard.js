@@ -4,6 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { getTasks, getOverdueTasks } from "../api/taskService";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import AssignmentTurnedInRoundedIcon from '@mui/icons-material/AssignmentTurnedInRounded';
+import DoneAllRoundedIcon from '@mui/icons-material/DoneAllRounded';
+import PendingActionsRoundedIcon from '@mui/icons-material/PendingActionsRounded';
+import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
+import PlaylistAddCheckRoundedIcon from '@mui/icons-material/PlaylistAddCheckRounded';
+import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
+import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 ChartJS.register(ArcElement, Tooltip, Legend);
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
@@ -71,41 +78,50 @@ const Dashboard = () => {
     }
   };
   return (
-    <div className="bg-gray-100 p-4 sm:p-6 rounded-lg shadow-md min-h-screen">
-      <h1 className="text-2xl sm:text-3xl font-semibold mb-4">Task Dashboard</h1>
+    <div className="bg-gray-100 min-h-screen p-4 sm:p-6">
+      <div className="max-w-6xl mx-auto">
+      <h1 className="text-2xl sm:text-3xl font-semibold mb-4 text-slate-800">Task Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg p-4 flex items-center justify-between">
+          <div className="bg-white rounded-lg p-4 flex items-center justify-between shadow-sm border border-gray-100">
           <div>
             <p className="font-semibold">Total Tasks</p>
             <p>{tasks.length}</p>
           </div>
-          <i className="far fa-check-circle text-green-500 text-2xl"></i>
+          <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+            <AssignmentTurnedInRoundedIcon fontSize="small" />
+          </div>
         </div>
-        <div className="bg-white rounded-lg p-4 flex items-center justify-between">
+        <div className="bg-white rounded-lg p-4 flex items-center justify-between shadow-sm border border-gray-100">
           <div>
             <p className="font-semibold">Completed</p>
             <p>{completedTasks}</p>
           </div>
-          <i className="far fa-check-circle text-green-500 text-2xl"></i>
+          <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+            <DoneAllRoundedIcon fontSize="small" />
+          </div>
         </div>
-        <div className="bg-white rounded-lg p-4 flex items-center justify-between">
+        <div className="bg-white rounded-lg p-4 flex items-center justify-between shadow-sm border border-gray-100">
           <div>
             <p className="font-semibold">In Progress</p>
             <p>{pendingTasks}</p>
           </div>
-          <i className="far fa-spinner text-blue-500 text-2xl"></i>
+          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+            <PendingActionsRoundedIcon fontSize="small" />
+          </div>
         </div>
-        <div className="bg-white rounded-lg p-4 flex items-center justify-between">
+        <div className="bg-white rounded-lg p-4 flex items-center justify-between shadow-sm border border-gray-100">
           <div>
             <p className="font-semibold">Overdue</p>
             <p>{overdueTasks}</p>
           </div>
-          <i className="far fa-clock text-red-500 text-2xl"></i>
+          <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+            <WarningAmberRoundedIcon fontSize="small" />
+          </div>
         </div>
       </div>
       <div className="mt-6">
         <button
-          className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 text-sm sm:text-base"
+          className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 text-sm sm:text-base shadow-sm"
           onClick={handleAddTask}
         >
           Add New Task
@@ -120,30 +136,47 @@ const Dashboard = () => {
         </div>
 
         <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md flex flex-col">
-          <h2 className="text-xl font-semibold mb-2">To-Do List</h2>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center text-orange-500">
+                <PlaylistAddCheckRoundedIcon fontSize="small" />
+              </div>
+              <h2 className="text-xl font-semibold text-slate-800">To-Do List</h2>
+            </div>
+            <span className="text-xs text-gray-400">{todoTasks.length} pending</span>
+          </div>
           <p className="text-sm text-gray-500 mb-4">
             Showing up to 5 pending tasks
           </p>
           {todoTasks.length === 0 ? (
-            <p className="text-gray-600 text-sm">You're all caught up. No pending tasks!</p>
+            <div className="flex items-center gap-2 text-gray-600 text-sm bg-slate-50 border border-dashed border-slate-200 rounded-lg px-3 py-2">
+              <RadioButtonUncheckedRoundedIcon fontSize="small" className="text-gray-400" />
+              <span>You're all caught up. No pending tasks!</span>
+            </div>
           ) : (
-            <ul className="space-y-3 max-h-72 overflow-y-auto">
+            <ul className="space-y-3 max-h-72 overflow-y-auto pr-1">
               {todoTasks.map((task) => (
                 <li
                   key={task.id}
-                  className="border rounded-lg p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+                  className="border border-slate-100 rounded-xl p-3 flex items-start justify-between gap-3 bg-slate-50/70"
                 >
-                  <div>
-                    <h3 className="font-semibold text-sm sm:text-base truncate max-w-xs">
-                      {task.name}
-                    </h3>
-                    {task.deadline && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        Due: {new Date(task.deadline).toLocaleDateString()}
-                      </p>
-                    )}
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1 text-orange-500">
+                      <RadioButtonUncheckedRoundedIcon fontSize="small" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-sm sm:text-base text-slate-800 truncate max-w-xs">
+                        {task.name}
+                      </h3>
+                      {task.deadline && (
+                        <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                          <AccessTimeRoundedIcon fontSize="inherit" />
+                          <span>Due: {new Date(task.deadline).toLocaleDateString()}</span>
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <span className="inline-flex items-center self-start sm:self-auto px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">
+                  <span className="inline-flex items-center self-start px-2.5 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">
                     Pending
                   </span>
                 </li>
@@ -151,6 +184,7 @@ const Dashboard = () => {
             </ul>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

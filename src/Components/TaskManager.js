@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import TaskList from './TaskList'; // Import the TaskList component
+import TaskList from './TaskList';
 import { getProfiles } from '../api/profileService';
 import { getTasks, addTask, updateTaskStatus as updateTaskStatusApi, removeTask as removeTaskApi } from '../api/taskService';
 
@@ -14,6 +14,8 @@ const TaskManager = () => {
     status: 'pending',
   });
   const [filterCriteria, setFilterCriteria] = useState('all');
+  const totalTasks = tasks.length;
+  const completedCount = tasks.filter(t => t.status === 'completed').length;
 
   useEffect(() => {
     fetchProfiles();
@@ -78,12 +80,26 @@ const TaskManager = () => {
   };
 
   return (
-    <div className="task-manager-wrapper p-4 bg-gray-100">
-      <div className="task-manager-container max-w-6xl mx-auto">
-        <h1 className="text-2xl font-semibold mb-4 text-left">Task Manager</h1>
+    <div className="p-4 bg-gray-100 min-h-screen">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-4">
+          <div>
+            <h1 className="text-2xl font-semibold text-left text-slate-800">Task Manager</h1>
+            <p className="text-xs text-slate-500 mt-1">Create, track and update tasks for your profiles.</p>
+          </div>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium">Total: {totalTasks}</span>
+            <span className="px-3 py-1 rounded-full bg-green-50 text-green-700 font-medium">Completed: {completedCount}</span>
+          </div>
+        </div>
 
-        <div className="mb-8 bg-white rounded-lg p-4 sm:p-6">
-          <h2 className="text-lg font-bold mb-4">Add Task</h2>
+        <div className="mb-8 bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-bold">Add Task</h2>
+            {tasks.length > 0 && (
+              <span className="text-xs text-gray-400">Recently added tasks appear below</span>
+            )}
+          </div>
           <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-1">
               <label className="block text-sm font-semibold mb-1">Profile:</label>

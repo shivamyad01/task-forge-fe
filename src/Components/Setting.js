@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
+import NotificationsActiveRoundedIcon from '@mui/icons-material/NotificationsActiveRounded';
 
 const Setting = () => {
   // const [theme, setTheme] = useState('light');
@@ -27,13 +29,16 @@ const Setting = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="p-6 max-w-md w-full bg-white rounded-xl shadow-md space-y-6">
-        <h2 className="text-3xl font-bold text-center mb-6">Settings</h2>
+    <div className="bg-gray-100 min-h-screen flex justify-center items-center p-4">
+      <div className="p-6 max-w-md w-full bg-white rounded-xl shadow-md border border-gray-100 space-y-6">
+        <h2 className="text-3xl font-bold text-center mb-6 text-slate-800">Settings</h2>
         
      
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold">Language</h3>
+          <h3 className="text-lg font-semibold flex items-center gap-2">
+            <LanguageRoundedIcon fontSize="small" className="text-gray-500" />
+            Language
+          </h3>
           <select
             value={language}
             onChange={handleLanguageChange}
@@ -45,7 +50,10 @@ const Setting = () => {
         </div>
         
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold">Notification Preferences</h3>
+          <h3 className="text-lg font-semibold flex items-center gap-2">
+            <NotificationsActiveRoundedIcon fontSize="small" className="text-gray-500" />
+            Notification Preferences
+          </h3>
           
           <label className="inline-flex items-center">
             <input
