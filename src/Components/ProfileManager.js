@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ProfileList from './ProfileList';
 import { getProfiles, addProfile, updateProfile, removeProfile } from '../api/profileService';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
-import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
+
 
 const ProfileManager = () => {
   const [profiles, setProfiles] = useState([]);
