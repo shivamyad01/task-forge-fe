@@ -70,7 +70,7 @@ const App = () => {
                 <Route path="profile" element={<ProfileManager />} />
                 <Route path="task" element={<TaskManager />} />
                 <Route path="help" element={<Help />} />
-                <Route path="setting" element={<Settings toggleMode={toggleMode} />} />
+                <Route path="setting" element={<Settings />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/dashboard" replace />} />

@@ -2,18 +2,12 @@ import React, { useState } from 'react';
 import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
 import NotificationsActiveRoundedIcon from '@mui/icons-material/NotificationsActiveRounded';
 
-const Setting = () => {
-  // const [theme, setTheme] = useState('light');
+const Settings = () => {
   const [language, setLanguage] = useState('english');
   const [notificationPreferences, setNotificationPreferences] = useState({
     email: true,
     browser: true
   });
-
-  // const handleThemeChange = (e) => {
-  //   setTheme(e.target.value);
-  //   // Apply theme change
-  // };
 
   const handleLanguageChange = (e) => {
     setLanguage(e.target.value);
@@ -82,4 +76,4 @@ const Setting = () => {
   );
 };
 
-export default Setting;
+export default Settings;

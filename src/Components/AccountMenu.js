@@ -11,10 +11,8 @@ import Tooltip from "@mui/material/Tooltip";
 
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import PersonIcon from "@mui/icons-material/Person";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import toast from 'react-hot-toast';
 
 export default function AccountMenu() {
@@ -70,41 +68,7 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem
-          component={Link}
-          to="/profile"
-          sx={{ "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" } }}
-        >
-          <ListItemIcon></ListItemIcon>
-          <Typography variant="body1">
-            <b id="profile" className="font-poppins text-xl ml-4">
-              Profile
-            </b>
-          </Typography>
-        </MenuItem>
         <Divider />
-        <MenuItem
-          onClick={handleLogout}
-          sx={{ "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" } }}
-        >
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          <Typography variant="body1">
-            <b className="inner-text text-sm font-extralight">New account</b>
-          </Typography>
-        </MenuItem>
-        <MenuItem
-          onClick={handleLogout}
-          sx={{ "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" } }}
-        >
-          <ListItemIcon>
-            <PersonAddIcon />
-          </ListItemIcon>
-          <Typography variant="body1">
-            <b className="inner-text text-sm font-extralight">Add account</b>
-          </Typography>
-        </MenuItem>
         <MenuItem
           sx={{ "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" } }}
         >

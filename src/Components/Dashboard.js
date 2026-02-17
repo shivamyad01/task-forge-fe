@@ -29,7 +29,6 @@ const Dashboard = () => {
       const overdueData = await getOverdueTasks();
 
       const completed = taskData.filter((task) => task.status === "completed").length;
-      // const pending = taskData.filter((task) => task.status === "pending").length;
       const overdue = overdueData.length; // Count of overdue tasks
 
       // Filter out overdue tasks from pending tasks
